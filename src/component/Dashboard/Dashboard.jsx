@@ -50,14 +50,14 @@ export default function Dashboard({ signOut }) {
   const [selectedPatient, setSelectedPatient] = React.useState(null);
   
   const pages = [
-    <DemographyPage />,
+    <DemographyPage selectedPatient={selectedPatient} />,
     <ChiefComplaintPage />,
     <OnExaminationPage />,
     <TreatmentSuggestedPage />,
-    <TreatmentDonePage />,
     <IOSViewerPage />,
     <PrePage />,
     <PostPage />,
+    <TreatmentDonePage />,
     <PaymentRecordsPage />
   ];
 
@@ -289,10 +289,10 @@ export default function Dashboard({ signOut }) {
           <Tab icon={<HelpOutlineIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Chief Complaint" />
           <Tab icon={<VisibilityIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="On Examination" />
           <Tab icon={<HealthAndSafetyIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Treatment Suggested" />
-          <Tab icon={<DoneIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Treatment Done" />
           <Tab icon={<FolderOpenIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="IOS Viewer" />
           <Tab icon={<AssessmentOutlinedIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Pre Page" />
           <Tab icon={<CheckCircleOutlineIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Post Page" />
+          <Tab icon={<DoneIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Treatment Done" />
           <Tab icon={<PaymentIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Payment Records" />
         </Tabs>
 

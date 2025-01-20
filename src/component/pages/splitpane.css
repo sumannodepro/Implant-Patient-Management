@@ -1,0 +1,18 @@
+.SplitPane {
+  position: relative;
+  height: 100vh;
+}
+
+.SplitPane > div {
+  padding: 10px;
+}
+
+.SplitPane .Resizer {
+  background-color: #989898;
+  width: 3px;
+  cursor: ew-resize;
+}
+
+.SplitPane .Resizer:hover {
+  background-color: #404040;
+}

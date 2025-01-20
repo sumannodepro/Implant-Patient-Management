@@ -1,0 +1,16 @@
+/* Add some simple styles for the Dashboard */
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-top: 20px;
+}
+
+p {
+  color: #7f8c8d;
+  text-align: center;
+  font-size: 18px;
+}
+
+.dashboard-content {
+  padding: 20px;
+}

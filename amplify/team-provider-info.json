@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-implantpatientmanage-dev-135204-authRole",
+      "UnauthRoleArn": "arn:aws:iam::471112786075:role/amplify-implantpatientmanage-dev-135204-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::471112786075:role/amplify-implantpatientmanage-dev-135204-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-implantpatientmanage-dev-135204-deployment",
+      "UnauthRoleName": "amplify-implantpatientmanage-dev-135204-unauthRole",
+      "StackName": "amplify-implantpatientmanage-dev-135204",
+      "StackId": "arn:aws:cloudformation:ap-south-1:471112786075:stack/amplify-implantpatientmanage-dev-135204/f9170600-d3e2-11ef-bca7-068c3e722fdb",
+      "AmplifyAppId": "d3giurt1wodc1r"
+    },
+    "categories": {
+      "auth": {
+        "implantpatientmanage4bdd264e": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
+      },
+      "api": {
+        "implantpatientmanage": {}
+      }
+    }
+  }
+}

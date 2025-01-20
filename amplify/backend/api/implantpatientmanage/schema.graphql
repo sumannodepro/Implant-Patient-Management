@@ -1,0 +1,17 @@
+type Patient @model @auth(rules: [
+  { allow: owner }, # Allow only the owner of the data to access it
+  { allow: groups, groups: ["Admin"] }, # Admin group can also access this data
+  { allow: public, operations: [read] } # Public access for read-only operations
+]) {
+  id: ID!
+  patientID: String!
+  title: String
+  patientName: String!
+  mobileNumber: String
+  emailId: String
+  address: String
+  dateOfBirth: AWSDate
+  age: Int
+  bloodGroup: String
+  gender: String
+}

@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "implantpatientmanage",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authimplantpatientmanage4bdd264e",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

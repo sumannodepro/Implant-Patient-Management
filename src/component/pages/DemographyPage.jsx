@@ -120,9 +120,6 @@ export default function DemographyPage({ selectedPatient }) {
     </Grid>
   </Paper>
 </Grid>
-
-
-
           {/* Right Column: Patient History */}
           <Grid item xs={12} sm={6} lg={8}>
               <TableContainer component={Paper}>

@@ -8,6 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import AddIcon from '@mui/icons-material/Add';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -138,25 +139,22 @@ export default function Dashboard({ signOut }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Implant Patient Management
           </Typography>
-          <Button
-  variant="outlined"
+          <IconButton
   sx={{
     backgroundColor: '#6c757d',
     borderRadius: '8px',
     color: '#ffffff',
-    padding: '6px 16px',
+    padding: '6px',
     marginRight: 2,
     height: '40px', // Set the height to match the TextField
+    width: '40px',  // Ensure it's square for an icon
     '&:hover': {
       backgroundColor: '#6c757d',
-      borderColor: '#6c757d',
     },
-    '&.MuiButton-outlined': {
-      borderColor: '#6c757d',
-    },
-  }} onClick={handleOpenModal}>
-  Add Patient
-</Button>
+  }}
+  onClick={handleOpenModal}>
+  <AddIcon /> {/* Replace with your desired Material-UI icon */}
+</IconButton>
 
 <TextField
   label="Search Patients"

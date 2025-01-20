@@ -139,17 +139,18 @@ export default function AddPatientModal({ open, handleClose }) {
       open={open}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+      aria-describedby="modal-modal-description">
       <Box sx={{
         position: 'absolute',
         top: '50%',
         left: '50%',
+        height: '95%',
         transform: 'translate(-50%, -50%)',
         width: 500,
         backgroundColor: 'white',
         padding: 2,
         borderRadius: 2,
+        overflowY: 'auto',
       }}>
         <h2 style={{ marginBottom: '10px' }}>Add Patient</h2>
         <FormControl fullWidth sx={{

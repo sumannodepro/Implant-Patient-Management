@@ -4,6 +4,7 @@ import { Fullscreen, Close } from '@mui/icons-material';
 import SplitPane from 'react-split-pane';
 import './splitpane.css'; // Import custom styles
 import STLViewer from './STLViewer'; // Import STLViewer component
+import DICOMViewer from './DICOMViewer'; // Import DICOMViewer component
 export default function IOSViewerPage({ selectedPatient }) {
   const [openModal, setOpenModal] = useState(false);
   const [selectedContent, setSelectedContent] = useState(null);
@@ -25,8 +26,7 @@ export default function IOSViewerPage({ selectedPatient }) {
     {selectedPatient ? (
       <SplitPane split="vertical" minSize={200} maxSize={-400} defaultSize="50%" className="SplitPane">
         {/* Dicom Viewer Pane */}
-        <Box sx={{ padding: 1, backgroundColor: '#f1f3f5', flexGrow: 1, borderRadius: 1, position: 'relative' }}>
-          <Typography sx={{ padding: 2 }}>Dicom Viewer content goes here.</Typography>
+        <Box sx={{ padding: 0, backgroundColor: '#f1f3f5', flexGrow: 1, borderRadius: 1, position: 'relative' }}>
           <IconButton
             sx={{
               position: 'absolute',
@@ -41,6 +41,7 @@ export default function IOSViewerPage({ selectedPatient }) {
           >
             <Fullscreen />
           </IconButton>
+          <DICOMViewer />
         </Box>
 
         {/* STL Viewer Pane */}

@@ -3,7 +3,7 @@ import { Typography, Box, IconButton, Modal, Paper } from '@mui/material';
 import { Fullscreen, Close } from '@mui/icons-material';
 import SplitPane from 'react-split-pane';
 import './splitpane.css'; // Import custom styles
-
+import STLViewer from './STLViewer'; // Import STLViewer component
 export default function IOSViewerPage({ selectedPatient }) {
   const [openModal, setOpenModal] = useState(false);
   const [selectedContent, setSelectedContent] = useState(null);
@@ -23,7 +23,7 @@ export default function IOSViewerPage({ selectedPatient }) {
   return (
     <>
     {selectedPatient ? (
-      <SplitPane split="vertical" minSize={200} maxSize={-200} defaultSize="75%" className="SplitPane">
+      <SplitPane split="vertical" minSize={200} maxSize={-400} defaultSize="50%" className="SplitPane">
         {/* Dicom Viewer Pane */}
         <Box sx={{ padding: 1, backgroundColor: '#f1f3f5', flexGrow: 1, borderRadius: 1, position: 'relative' }}>
           <Typography sx={{ padding: 2 }}>Dicom Viewer content goes here.</Typography>
@@ -44,8 +44,7 @@ export default function IOSViewerPage({ selectedPatient }) {
         </Box>
 
         {/* STL Viewer Pane */}
-        <Box sx={{ padding: 1, backgroundColor: '#f1f3f5', flexGrow: 1, borderRadius: 1, position: 'relative' }}>
-          <Typography sx={{ padding: 2 }}>STL Viewer content goes here.</Typography>
+        <Box sx={{ padding: 0, backgroundColor: '#f1f3f5', flexGrow: 1, borderRadius: 1, position: 'relative' }}>
           <IconButton
             sx={{
               position: 'absolute',
@@ -60,6 +59,7 @@ export default function IOSViewerPage({ selectedPatient }) {
           >
             <Fullscreen />
           </IconButton>
+          <STLViewer />
         </Box>
       </SplitPane>
       ) : (
@@ -105,8 +105,18 @@ export default function IOSViewerPage({ selectedPatient }) {
           >
             <Close />
           </IconButton>
-
-          <Typography sx={{ padding: 2 }}>Content of {selectedContent} goes here.</Typography>
+          {selectedContent === 'Dicom Viewer' && (
+    <Box sx={{ height: '100%', overflow: 'auto' }}>
+      {/* Render your Dicom Viewer content */}
+      <Typography sx={{ padding: 2 }}>Dicom Viewer in Fullscreen</Typography>
+    </Box>
+  )}
+  {selectedContent === 'STL Viewer' && (
+    <Box sx={{ height: '100%', overflow: 'auto' }}>
+      {/* Render the STL Viewer component */}
+      <STLViewer />
+    </Box>
+  )}
         </Paper>
       </Modal>
     </>

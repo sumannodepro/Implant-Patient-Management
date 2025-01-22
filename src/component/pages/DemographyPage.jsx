@@ -1,12 +1,24 @@
-import React from 'react';
-import { Box, Typography, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button, Avatar } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, Paper, Grid, Table, TableBody,TextField, TableCell, TableContainer, TableHead, TableRow,Modal, IconButton, Button, Avatar } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import CloseIcon from '@mui/icons-material/Close';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import dayjs from 'dayjs';
+
 export default function DemographyPage({ selectedPatient }) {
+  const [open, setOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const handleView = (patient) => {
     console.log('Viewing patient:', patient);
     // Add your logic here, e.g., navigate to a detailed patient page or open a modal
   };
-  
+  const handleDateChange = (newDate) => {
+    setSelectedDate(newDate);
+  };
   return (
     <Box sx={{ padding: 1 }}>
       {selectedPatient ? (
@@ -112,8 +124,7 @@ export default function DemographyPage({ selectedPatient }) {
           sx={{
             backgroundColor: '#343a40',
             '&:hover': { backgroundColor: '#495057' },
-          }}
-        >
+          }} onClick={handleOpen}> 
           Appointment
         </Button>
       </Grid>
@@ -148,7 +159,6 @@ export default function DemographyPage({ selectedPatient }) {
                   </TableBody>
                 </Table>
               </TableContainer>
-           
           </Grid>
         </Grid>
       ) : (
@@ -156,6 +166,59 @@ export default function DemographyPage({ selectedPatient }) {
           Please select a patient to view details.
         </Typography>
       )}
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h6" component="h2">
+              Appointment
+            </Typography>
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+
+          <TextField
+            fullWidth
+            label="Enter details"
+            variant="outlined"
+            size="small"
+            sx={{ marginBottom: 2 }}
+          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker
+              label="Select Date and Time"
+              value={selectedDate}
+              onChange={handleDateChange}
+              minDate={dayjs()}
+              renderInput={(params) => <TextField {...params} fullWidth sx={{ marginBottom: 2 }} />}
+            />
+          </LocalizationProvider>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleClose}
+            sx={{
+              backgroundColor: '#343a40',
+              '&:hover': { backgroundColor: '#495057' },
+            }}
+          >
+            OK
+          </Button>
+        </Box>
+      </Modal>
     </Box>
   );
 }

@@ -15,3 +15,23 @@ type Patient @model @auth(rules: [
   bloodGroup: String
   gender: String
 }
+type Treatment @model @auth(rules: [
+  { allow: owner }, 
+  { allow: groups, groups: ["Admin"] },
+  { allow: public, operations: [read] }
+]) {
+  id: ID!
+  treatmentName: String!
+  description: String
+  price: Float!
+  duration: Int # Duration in minutes
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  doctorID: String # Reference to the doctor
+  isActive: Boolean!
+  category: String
+  discount: Float
+  insuranceCovered: Boolean
+  notes: String
+  imageUrl: String
+}

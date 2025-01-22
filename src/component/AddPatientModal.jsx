@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Modal, Box, Button, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Modal, Box, Button, TextField, FormControl, InputLabel, Select, MenuItem,IconButton } from '@mui/material';
 import { API, graphqlOperation } from 'aws-amplify';
+import CloseIcon from '@mui/icons-material/Close';
 import { listPatients } from '../graphql/queries';
 import { createPatient } from '../graphql/mutations';
 import { Auth } from 'aws-amplify';
@@ -141,18 +142,49 @@ export default function AddPatientModal({ open, handleClose }) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description">
       <Box sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        height: '95%',
-        transform: 'translate(-50%, -50%)',
-        width: 500,
-        backgroundColor: 'white',
-        padding: 2,
-        borderRadius: 2,
-        overflowY: 'auto',
+       position: 'absolute',
+       top: '50%',
+       left: '50%',
+       transform: 'translate(-50%, -50%)',
+       height: '95%',
+       width: 500,
+       backgroundColor: 'white',
+       padding: 2,
+       borderRadius: 2,
+       display: 'flex',
+       flexDirection: 'column',
+       boxShadow: 24,
       }}>
-        <h2 style={{ marginBottom: '10px' }}>Add Patient</h2>
+         <Box
+          sx={{
+            position: 'sticky',
+            top: 0,
+            backgroundColor: 'white',
+            zIndex: 1,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingBottom: 1,
+            borderBottom: '1px solid #ddd',
+          }}
+        >
+          <h2 style={{ margin: 0 }}>Add Patient</h2>
+          <IconButton
+            onClick={handleCloseBtn}
+            sx={{
+              color: '#343a40',
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: 'auto',
+            paddingTop: 2,
+          }}
+        >
         <FormControl fullWidth sx={{
             marginBottom: 2,
             '& .MuiOutlinedInput-root': {
@@ -480,6 +512,7 @@ export default function AddPatientModal({ open, handleClose }) {
           Close
         </Button>
       </Box>
+    </Box>
     </Modal>
   );
 }

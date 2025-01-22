@@ -18,6 +18,7 @@ export const getPatient = /* GraphQL */ `
       createdAt
       updatedAt
       owner
+      __typename
     }
   }
 `;
@@ -43,8 +44,62 @@ export const listPatients = /* GraphQL */ `
         createdAt
         updatedAt
         owner
+        __typename
       }
       nextToken
+      __typename
+    }
+  }
+`;
+export const getTreatment = /* GraphQL */ `
+  query GetTreatment($id: ID!) {
+    getTreatment(id: $id) {
+      id
+      treatmentName
+      description
+      price
+      duration
+      createdAt
+      updatedAt
+      doctorID
+      isActive
+      category
+      discount
+      insuranceCovered
+      notes
+      imageUrl
+      owner
+      __typename
+    }
+  }
+`;
+export const listTreatments = /* GraphQL */ `
+  query ListTreatments(
+    $filter: ModelTreatmentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTreatments(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        treatmentName
+        description
+        price
+        duration
+        createdAt
+        updatedAt
+        doctorID
+        isActive
+        category
+        discount
+        insuranceCovered
+        notes
+        imageUrl
+        owner
+        __typename
+      }
+      nextToken
+      __typename
     }
   }
 `;

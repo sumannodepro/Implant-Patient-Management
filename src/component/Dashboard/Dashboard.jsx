@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
+import HomeIcon from '@mui/icons-material/Home';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -27,6 +28,7 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import PaymentIcon from '@mui/icons-material/Payment';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Home from '../pages/HomePage';
 import DemographyPage from '../pages/DemographyPage';
 import ChiefComplaintPage from '../pages/ChiefComplaintPage';
 import OnExaminationPage from '../pages/OnExaminationPage';
@@ -42,7 +44,22 @@ import { listPatients } from '../../graphql/queries';
 export default function Dashboard({ signOut }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElq, setAnchorElq] = React.useState(null);
-  
+  // State for current date and time
+  const [currentDateTime, setCurrentDateTime] = useState({
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString(),
+  });
+
+  const [chiefComplaints, setChiefComplaints] = useState([]);
+  const [findings, setFindings] = useState([]);
+  const [diagnosis, setDiagnosis] = useState([]);
+
+  const [leftValue, setLeftValue] = useState('');
+  const [rightValue, setRightValue] = useState('');
+  const [guardianName, setGuardianName] = useState(''); // For storing parent/guardian name
+  const [relationship, setRelationship] = useState(''); // For storing relationship
+  const [selectedTreatments, setSelectedTreatments] = useState([]);
+
   const [loading, setLoading] = React.useState(false);
   const [value, setValue] = React.useState(0);
   const [openModal, setOpenModal] = React.useState(false); // State to control modal visibility
@@ -51,15 +68,34 @@ export default function Dashboard({ signOut }) {
   const [selectedPatient, setSelectedPatient] = React.useState(null);
   
   const pages = [
+    <Home/>,
     <DemographyPage selectedPatient={selectedPatient} />,
-    <ChiefComplaintPage />,
-    <OnExaminationPage />,
-    <TreatmentSuggestedPage />,
-    <IOSViewerPage />,
-    <PrePage />,
-    <PostPage />,
-    <TreatmentDonePage />,
-    <PaymentRecordsPage />
+    <ChiefComplaintPage 
+    selectedPatient={selectedPatient}
+    chiefComplaints={chiefComplaints}
+    setChiefComplaints={setChiefComplaints}
+    findings={findings}
+    setFindings={setFindings}
+    diagnosis={diagnosis}
+    setDiagnosis={setDiagnosis}/>,
+    <OnExaminationPage selectedPatient={selectedPatient}/>,
+    <TreatmentSuggestedPage
+    selectedPatient={selectedPatient} 
+    leftValue={leftValue}
+    setLeftValue={setLeftValue}
+    rightValue={rightValue}
+    setRightValue={setRightValue}
+    guardianName={guardianName}
+    setGuardianName={setGuardianName}
+    relationship={relationship}
+    setRelationship={setRelationship}
+    selectedTreatments={selectedTreatments}
+    setSelectedTreatments={setSelectedTreatments}/>,
+    <IOSViewerPage selectedPatient={selectedPatient}/>,
+    <PrePage selectedPatient={selectedPatient}/>,
+    <PostPage selectedPatient={selectedPatient}/>,
+    <TreatmentDonePage selectedPatient={selectedPatient}/>,
+    <PaymentRecordsPage selectedPatient={selectedPatient}/>
   ];
 
   const handleMenu = (event) => {
@@ -131,14 +167,33 @@ export default function Dashboard({ signOut }) {
     setSearchResults([]);
     setAnchorElq(null); 
   };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDateTime({
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <Box sx={{ flexGrow: 1, width: '100%' }}>
       <AppBar position="static" sx={{ backgroundColor: '#343a40' }}> {/* Dynamic AppBar color based on tab */}
         <Toolbar>
-        
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Implant Patient Management
           </Typography>
+          {/* Display selected patient information */}
+        {selectedPatient && (
+          <Typography variant="body2" sx={{ marginRight: 2, color: '#ffffff' }}>
+            {selectedPatient.patientName} (ID: {selectedPatient.patientID})
+          </Typography>
+        )}
+         {/* Display current date and time */}
+        <Typography variant="body2" sx={{ marginRight: 2, color: '#ffffff' }}>
+          {currentDateTime.date} | {currentDateTime.time}
+        </Typography>
+
           <IconButton
   sx={{
     backgroundColor: '#6c757d',
@@ -214,15 +269,12 @@ export default function Dashboard({ signOut }) {
     {searchResults.map((patient) => (
       <MenuItem
         key={patient.id}
-        onClick={() => handlePatientSelect(patient)}
-      >
+        onClick={() => handlePatientSelect(patient)}>
         {patient.patientName}
       </MenuItem>
     ))}
   </Paper>
 </Popper>
-
-
           <div>
             <IconButton
               size="large"
@@ -283,9 +335,10 @@ export default function Dashboard({ signOut }) {
             borderColor: 'divider',
             '& .MuiTabs-indicator': {
             backgroundColor: '#6c757d',},}}>
+          <Tab icon={<HomeIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Home" />
           <Tab icon={<PersonIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Demography" />
           <Tab icon={<HelpOutlineIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Chief Complaint" />
-          <Tab icon={<VisibilityIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="On Examination" />
+          <Tab icon={<VisibilityIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Case Photos" />
           <Tab icon={<HealthAndSafetyIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Treatment Suggested" />
           <Tab icon={<FolderOpenIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="IOS Viewer" />
           <Tab icon={<AssessmentOutlinedIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Pre Page" />

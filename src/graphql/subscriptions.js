@@ -21,6 +21,7 @@ export const onCreatePatient = /* GraphQL */ `
       createdAt
       updatedAt
       owner
+      __typename
     }
   }
 `;
@@ -44,6 +45,7 @@ export const onUpdatePatient = /* GraphQL */ `
       createdAt
       updatedAt
       owner
+      __typename
     }
   }
 `;
@@ -67,6 +69,82 @@ export const onDeletePatient = /* GraphQL */ `
       createdAt
       updatedAt
       owner
+      __typename
+    }
+  }
+`;
+export const onCreateTreatment = /* GraphQL */ `
+  subscription OnCreateTreatment(
+    $filter: ModelSubscriptionTreatmentFilterInput
+    $owner: String
+  ) {
+    onCreateTreatment(filter: $filter, owner: $owner) {
+      id
+      treatmentName
+      description
+      price
+      duration
+      createdAt
+      updatedAt
+      doctorID
+      isActive
+      category
+      discount
+      insuranceCovered
+      notes
+      imageUrl
+      owner
+      __typename
+    }
+  }
+`;
+export const onUpdateTreatment = /* GraphQL */ `
+  subscription OnUpdateTreatment(
+    $filter: ModelSubscriptionTreatmentFilterInput
+    $owner: String
+  ) {
+    onUpdateTreatment(filter: $filter, owner: $owner) {
+      id
+      treatmentName
+      description
+      price
+      duration
+      createdAt
+      updatedAt
+      doctorID
+      isActive
+      category
+      discount
+      insuranceCovered
+      notes
+      imageUrl
+      owner
+      __typename
+    }
+  }
+`;
+export const onDeleteTreatment = /* GraphQL */ `
+  subscription OnDeleteTreatment(
+    $filter: ModelSubscriptionTreatmentFilterInput
+    $owner: String
+  ) {
+    onDeleteTreatment(filter: $filter, owner: $owner) {
+      id
+      treatmentName
+      description
+      price
+      duration
+      createdAt
+      updatedAt
+      doctorID
+      isActive
+      category
+      discount
+      insuranceCovered
+      notes
+      imageUrl
+      owner
+      __typename
     }
   }
 `;

@@ -4,7 +4,7 @@ import { Fullscreen, Close } from '@mui/icons-material';
 import SplitPane from 'react-split-pane';
 import './splitpane.css'; // Import custom styles
 
-export default function IOSViewerPage() {
+export default function IOSViewerPage({ selectedPatient }) {
   const [openModal, setOpenModal] = useState(false);
   const [selectedContent, setSelectedContent] = useState(null);
 
@@ -22,6 +22,7 @@ export default function IOSViewerPage() {
 
   return (
     <>
+    {selectedPatient ? (
       <SplitPane split="vertical" minSize={200} maxSize={-200} defaultSize="75%" className="SplitPane">
         {/* Dicom Viewer Pane */}
         <Box sx={{ padding: 1, backgroundColor: '#f1f3f5', flexGrow: 1, borderRadius: 1, position: 'relative' }}>
@@ -61,6 +62,13 @@ export default function IOSViewerPage() {
           </IconButton>
         </Box>
       </SplitPane>
+      ) : (
+        <Box sx={{ padding: 1 }}>
+        <Typography variant="h6" color="error" sx={{ textAlign: 'center' }}>
+          Please select a patient to view CBCT files.
+        </Typography>
+        </Box>
+      )}
 
       {/* Fullscreen Modal */}
       <Modal

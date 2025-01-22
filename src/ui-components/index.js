@@ -6,4 +6,6 @@
 
 export { default as PatientCreateForm } from "./PatientCreateForm";
 export { default as PatientUpdateForm } from "./PatientUpdateForm";
+export { default as TreatmentCreateForm } from "./TreatmentCreateForm";
+export { default as TreatmentUpdateForm } from "./TreatmentUpdateForm";
 export { default as studioTheme } from "./studioTheme";

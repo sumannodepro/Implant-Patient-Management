@@ -21,6 +21,7 @@ export const createPatient = /* GraphQL */ `
       createdAt
       updatedAt
       owner
+      __typename
     }
   }
 `;
@@ -44,6 +45,7 @@ export const updatePatient = /* GraphQL */ `
       createdAt
       updatedAt
       owner
+      __typename
     }
   }
 `;
@@ -67,6 +69,82 @@ export const deletePatient = /* GraphQL */ `
       createdAt
       updatedAt
       owner
+      __typename
+    }
+  }
+`;
+export const createTreatment = /* GraphQL */ `
+  mutation CreateTreatment(
+    $input: CreateTreatmentInput!
+    $condition: ModelTreatmentConditionInput
+  ) {
+    createTreatment(input: $input, condition: $condition) {
+      id
+      treatmentName
+      description
+      price
+      duration
+      createdAt
+      updatedAt
+      doctorID
+      isActive
+      category
+      discount
+      insuranceCovered
+      notes
+      imageUrl
+      owner
+      __typename
+    }
+  }
+`;
+export const updateTreatment = /* GraphQL */ `
+  mutation UpdateTreatment(
+    $input: UpdateTreatmentInput!
+    $condition: ModelTreatmentConditionInput
+  ) {
+    updateTreatment(input: $input, condition: $condition) {
+      id
+      treatmentName
+      description
+      price
+      duration
+      createdAt
+      updatedAt
+      doctorID
+      isActive
+      category
+      discount
+      insuranceCovered
+      notes
+      imageUrl
+      owner
+      __typename
+    }
+  }
+`;
+export const deleteTreatment = /* GraphQL */ `
+  mutation DeleteTreatment(
+    $input: DeleteTreatmentInput!
+    $condition: ModelTreatmentConditionInput
+  ) {
+    deleteTreatment(input: $input, condition: $condition) {
+      id
+      treatmentName
+      description
+      price
+      duration
+      createdAt
+      updatedAt
+      doctorID
+      isActive
+      category
+      discount
+      insuranceCovered
+      notes
+      imageUrl
+      owner
+      __typename
     }
   }
 `;

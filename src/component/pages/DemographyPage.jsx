@@ -177,7 +177,7 @@ export default function DemographyPage({ selectedPatient }) {
             bgcolor: 'background.paper',
             borderRadius: 2,
             boxShadow: 24,
-            p: 4,
+            p: 2,
           }}
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -191,18 +191,19 @@ export default function DemographyPage({ selectedPatient }) {
 
           <TextField
             fullWidth
-            label="Enter details"
+            label="Enter Complaint"
             variant="outlined"
-            size="small"
+            size="medium"
             sx={{ marginBottom: 2 }}
           />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label="Select Date and Time"
               value={selectedDate}
+              sx={{ width: '100%' }}
               onChange={handleDateChange}
               minDate={dayjs()}
-              renderInput={(params) => <TextField {...params} fullWidth sx={{ marginBottom: 2 }} />}
+              renderInput={(params) => <TextField {...params}   sx={{ marginBottom: 2 }} />}
             />
           </LocalizationProvider>
           <Button
@@ -211,10 +212,10 @@ export default function DemographyPage({ selectedPatient }) {
             fullWidth
             onClick={handleClose}
             sx={{
+              marginTop: 2,
               backgroundColor: '#343a40',
               '&:hover': { backgroundColor: '#495057' },
-            }}
-          >
+            }}>
             OK
           </Button>
         </Box>

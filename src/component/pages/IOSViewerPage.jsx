@@ -5,121 +5,90 @@ import SplitPane from 'react-split-pane';
 import './splitpane.css'; // Import custom styles
 import STLViewer from './STLViewer'; // Import STLViewer component
 import DICOMViewer from './DICOMViewer'; // Import DICOMViewer component
+
 export default function IOSViewerPage({ selectedPatient }) {
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedContent, setSelectedContent] = useState(null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [activePane, setActivePane] = useState(null); // 'dicom' or 'stl'
 
-  // Function to open modal with selected content
-  const handleOpenModal = (content) => {
-    setSelectedContent(content);
-    setOpenModal(true);
-  };
-
-  // Function to close modal
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setSelectedContent(null);
+  const toggleFullScreen = (pane) => {
+    setActivePane(pane);
+    setIsFullScreen(!isFullScreen);
   };
 
   return (
     <>
-    {selectedPatient ? (
-      <SplitPane split="vertical" minSize={200} maxSize={-400} defaultSize="50%" className="SplitPane">
-        {/* Dicom Viewer Pane */}
-        <Box sx={{ padding: 0, backgroundColor: '#f1f3f5', flexGrow: 1, borderRadius: 1, position: 'relative' }}>
-          <IconButton
+      {selectedPatient ? (
+        <SplitPane
+          split="vertical"
+          minSize={200}
+          maxSize={-400}
+          defaultSize="50%"
+          className="SplitPane"
+          style={isFullScreen ? { height: '100vh' } : {}}
+        >
+          {/* Dicom Viewer Pane */}
+          <Box
             sx={{
-              position: 'absolute',
-              top: 8,
-              right: 8,  // Change from left: 8 to right: 8
-              backgroundColor: '#fff',
-              borderRadius: '50%',
-              padding: 1,
-              '&:hover': { backgroundColor: '#ddd' },
+              padding: 0,
+              backgroundColor: '#f1f3f5',
+              flexGrow: 1,
+              borderRadius: 1,
+              position: 'relative',
+              height: isFullScreen && activePane === 'dicom' ? '100vh' : 'auto',
             }}
-            onClick={() => handleOpenModal('Dicom Viewer')}
           >
-            <Fullscreen />
-          </IconButton>
-          <DICOMViewer />
-        </Box>
+            <IconButton
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                backgroundColor: '#fff',
+                borderRadius: '50%',
+                padding: 1,
+                '&:hover': { backgroundColor: '#ddd' },
+              }}
+              onClick={() => toggleFullScreen('dicom')}
+            >
+              {isFullScreen && activePane === 'dicom' ? <Close /> : <Fullscreen />}
+            </IconButton>
+            <DICOMViewer />
+          </Box>
 
-        {/* STL Viewer Pane */}
-        <Box sx={{ padding: 0, backgroundColor: '#f1f3f5', flexGrow: 1, borderRadius: 1, position: 'relative' }}>
-          <IconButton
+          {/* STL Viewer Pane */}
+          <Box
             sx={{
-              position: 'absolute',
-              top: 8,
-              right: 8,  // Change from left: 8 to right: 8
-              backgroundColor: '#fff',
-              borderRadius: '50%',
-              padding: 1,
-              '&:hover': { backgroundColor: '#ddd' },
+              padding: 0,
+              backgroundColor: '#f1f3f5',
+              flexGrow: 1,
+              borderRadius: 1,
+              position: 'relative',
+              height: isFullScreen && activePane === 'stl' ? '100vh' : 'auto',
             }}
-            onClick={() => handleOpenModal('STL Viewer')}
           >
-            <Fullscreen />
-          </IconButton>
-          <STLViewer />
-        </Box>
-      </SplitPane>
+            <IconButton
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                backgroundColor: '#fff',
+                borderRadius: '50%',
+                padding: 1,
+                '&:hover': { backgroundColor: '#ddd' },
+              }}
+              onClick={() => toggleFullScreen('stl')}
+            >
+              {isFullScreen && activePane === 'stl' ? <Close /> : <Fullscreen />}
+            </IconButton>
+            <STLViewer />
+          </Box>
+        </SplitPane>
       ) : (
         <Box sx={{ padding: 1 }}>
-        <Typography variant="h6" color="error" sx={{ textAlign: 'center' }}>
-          Please select a patient to view CBCT files.
-        </Typography>
+          <Typography variant="h6" color="error" sx={{ textAlign: 'center' }}>
+            Please select a patient to view CBCT files.
+          </Typography>
         </Box>
       )}
-
-      {/* Fullscreen Modal */}
-      <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Paper
-          sx={{
-            width: '95%',
-            height: '95%',
-            position: 'relative',
-            padding: 2,
-            backgroundColor: '#fff',
-            borderRadius: 2,
-            boxShadow: 24,
-          }}
-        >
-          <IconButton
-            sx={{
-              position: 'absolute',
-              top: 8,
-              right: 8,
-              backgroundColor: '#fff',
-              borderRadius: '50%',
-              padding: 1,
-              '&:hover': { backgroundColor: '#ddd' },
-            }}
-            onClick={handleCloseModal}
-          >
-            <Close />
-          </IconButton>
-          {selectedContent === 'Dicom Viewer' && (
-    <Box sx={{ height: '100%', overflow: 'auto' }}>
-      {/* Render your Dicom Viewer content */}
-      <Typography sx={{ padding: 2 }}>Dicom Viewer in Fullscreen</Typography>
-    </Box>
-  )}
-  {selectedContent === 'STL Viewer' && (
-    <Box sx={{ height: '100%', overflow: 'auto' }}>
-      {/* Render the STL Viewer component */}
-      <STLViewer />
-    </Box>
-  )}
-        </Paper>
-      </Modal>
     </>
   );
 }

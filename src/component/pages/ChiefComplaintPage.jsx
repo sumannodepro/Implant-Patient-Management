@@ -12,8 +12,11 @@ import {
   ListItem,
   ListItemText,
 } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export default function ComplaintPage({
   chiefComplaints,
@@ -22,12 +25,27 @@ export default function ComplaintPage({
   setFindings,
   diagnosis,
   setDiagnosis,
-  selectedPatient
+  selectedPatient,
 }) {
+  const [mode, setMode] = useState('text');
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [open, setOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [currentEntry, setCurrentEntry] = useState('');
   const [entries, setEntries] = useState([]);
+
+  const handleToggle = (event, newMode) => {
+    if (newMode !== null) {
+      setMode(newMode);
+    }
+  };
+const handleRemoveFile = (fileName) => {
+  setUploadedFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
+};
+  const handleFileUpload = (event) => {
+    const files = Array.from(event.target.files);
+    setUploadedFiles((prev) => [...prev, ...files]);
+  };
 
   const handleOpen = (title, initialEntries) => {
     setModalTitle(title);
@@ -100,26 +118,142 @@ export default function ComplaintPage({
       </Paper>
     </Grid>
   );
-
   return (
     <Box sx={{ padding: 1 }}>
       {selectedPatient ? (
-      <Grid container spacing={1}>
-        {renderSegment('Chief Complaint', chiefComplaints, () =>
-          handleOpen('Chief Complaint', chiefComplaints)
-        )}
-        {renderSegment('Findings', findings, () =>
-          handleOpen('Findings', findings)
-        )}
-        {renderSegment('Diagnosis', diagnosis, () =>
-          handleOpen('Diagnosis', diagnosis)
-        )}
-      </Grid>
-) : (
-  <Typography variant="h6" color="error" sx={{ textAlign: 'center' }}>
-    Please select a patient to view chief complaint.
-  </Typography>
-)}
+        <>
+          <Box display="flex" justifyContent="flex-start" mb={1}>
+            <ToggleButtonGroup
+              value={mode}
+              exclusive
+              onChange={handleToggle}
+              aria-label="mode selection"
+              size="small" // Reduce the size of the ToggleButtonGroup
+              sx={{
+                marginTop: '-8px',
+              '& .MuiToggleButton-root': {
+              fontSize: '0.75rem', // Smaller font size
+              padding: '4px 8px', // Reduce padding
+              minWidth: '70px', // Reduce button width
+              },
+              }}>
+              <ToggleButton value="text" aria-label="Text Mode">
+                Text Mode
+              </ToggleButton>
+              <ToggleButton value="upload" aria-label="Upload Mode">
+                Upload Mode
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
+  
+          <Grid container spacing={1}>
+            {/* Left Segment - Displays either Text Mode or Upload Mode */}
+            <Grid item xs={12} md={4} >
+              {mode === 'text' ? (
+                <Grid container spacing={1} direction="column">
+                  {renderSegment('Chief Complaint', chiefComplaints, () =>
+                    handleOpen('Chief Complaint', chiefComplaints)
+                  )}
+                  {renderSegment('Findings', findings, () =>
+                    handleOpen('Findings', findings)
+                  )}
+                  {renderSegment('Diagnosis', diagnosis, () =>
+                    handleOpen('Diagnosis', diagnosis)
+                  )}
+                </Grid>
+              ) : (
+                <Paper
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#f8f9fa',
+                    borderRadius: 3,
+                    textAlign: 'center',
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    component="label"
+                    sx={{ backgroundColor: '#343a40', color: '#f8f9fa' }}
+                    startIcon={<CloudUploadIcon />}
+                  >
+                    Upload
+                    <input
+                      type="file"
+                      hidden
+                      multiple
+                      accept="image/*,application/pdf"
+                      onChange={handleFileUpload}
+                    />
+                  </Button>
+                  <Box mt={2}>
+                    {uploadedFiles.length > 0 && (
+                      <Grid container spacing={2}>
+                        {uploadedFiles.map((file, index) => (
+                          <Grid item xs={12} sm={6} md={4} key={index}>
+                            <Box sx={{ position: 'relative' }}>
+                              {file.type.startsWith('image/') ? (
+                                <img
+                                  src={URL.createObjectURL(file)}
+                                  alt={file.name}
+                                  style={{
+                                    width: '100%',
+                                    height: 'auto',
+                                    borderRadius: 4,
+                                  }}
+                                />
+                              ) : (
+                                <Typography variant="body2" color="textSecondary">
+                                  {file.name} (PDF)
+                                </Typography>
+                              )}
+                              <IconButton
+                                size="small"
+                                onClick={() => handleRemoveFile(file.name)}
+                                sx={{
+                                  position: 'absolute',
+                                  top: 8,
+                                  right: 8,
+                                  backgroundColor: 'white',
+                                }}
+                              >
+                                <DeleteIcon fontSize="small" />
+                              </IconButton>
+                            </Box>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    )}
+                  </Box>
+                </Paper>
+              )}
+            </Grid>
+  
+            {/* Right Segment - Placeholder for Future Data */}
+            <Grid item xs={12} md={8}>
+              <Paper
+                sx={{
+                  padding: 2,
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: 3,
+                  minHeight: '200px', // Placeholder height
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                }}>
+                <Typography variant="body1" color="textSecondary">
+                  Past Data Will Be Displayed Here
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        </>
+      ) : (
+        <Typography variant="h6" color="error" sx={{ textAlign: 'center' }}>
+          Please select a patient to view details.
+        </Typography>
+      )}
+  
       {/* Modal */}
       <Modal open={open} onClose={handleClose}>
         <Box
@@ -143,7 +277,7 @@ export default function ComplaintPage({
               <CloseIcon />
             </IconButton>
           </Box>
-
+  
           <List
             sx={{
               maxHeight: 150,
@@ -174,14 +308,15 @@ export default function ComplaintPage({
               </Typography>
             )}
           </List>
-
+  
           <TextField
             label={`Enter ${modalTitle}`}
             fullWidth
             value={currentEntry}
             onChange={(e) => setCurrentEntry(e.target.value)}
-            sx={{ marginBottom: 2 }}/>
-
+            sx={{ marginBottom: 2 }}
+          />
+  
           <Box display="flex" justifyContent="space-between">
             <Button
               variant="contained"
@@ -213,7 +348,6 @@ export default function ComplaintPage({
           </Box>
         </Box>
       </Modal>
-    
     </Box>
-  );
+  );  
 }

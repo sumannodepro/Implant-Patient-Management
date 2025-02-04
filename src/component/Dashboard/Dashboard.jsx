@@ -31,7 +31,7 @@ import TextField from '@mui/material/TextField';
 import Home from '../pages/HomePage';
 import DemographyPage from '../pages/DemographyPage';
 import ChiefComplaintPage from '../pages/ChiefComplaintPage';
-import OnExaminationPage from '../pages/OnExaminationPage';
+import CasePhotos from '../pages/CasePhotos';
 import TreatmentSuggestedPage from '../pages/TreatmentSuggestedPage';
 import TreatmentDonePage from '../pages/TreatmentDonePage';
 import IOSViewerPage from '../pages/IOSViewerPage';
@@ -78,7 +78,7 @@ export default function Dashboard({ signOut }) {
     setFindings={setFindings}
     diagnosis={diagnosis}
     setDiagnosis={setDiagnosis}/>,
-    <OnExaminationPage selectedPatient={selectedPatient}/>,
+    <CasePhotos selectedPatient={selectedPatient}/>,
     <TreatmentSuggestedPage
     selectedPatient={selectedPatient} 
     leftValue={leftValue}
@@ -178,7 +178,7 @@ export default function Dashboard({ signOut }) {
   }, []);
   return (
     <Box sx={{ flexGrow: 1, width: '100%' }}>
-      <AppBar position="static" sx={{ backgroundColor: '#343a40' }}> {/* Dynamic AppBar color based on tab */}
+      <AppBar position="fixed" sx={{ backgroundColor: '#343a40' }}> {/* Dynamic AppBar color based on tab */}
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Implant Patient Management
@@ -324,7 +324,7 @@ export default function Dashboard({ signOut }) {
       </AppBar>
       {/* Add Patient Modal */}
       <AddPatientModal open={openModal} handleClose={handleCloseModal} />
-      <Box sx={{ width: '100%', padding: '20px' }}>
+      <Box sx={{ width: '100%', padding: '20px',marginTop: '40px' }}>
         <Tabs
           value={value}
           onChange={handleChange}

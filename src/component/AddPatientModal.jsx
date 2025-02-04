@@ -79,7 +79,6 @@ export default function AddPatientModal({ open, handleClose }) {
         alert('Please fill in all required fields.');
         return;
       }
-  
       const formattedDateOfBirth = dateOfBirth.split('/').reverse().join('-');
   
       const patientID = generatePatientID(patientName); // Function to generate patientID

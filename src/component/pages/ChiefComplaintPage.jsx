@@ -78,7 +78,7 @@ const handleRemoveFile = (fileName) => {
   };
 
   const renderSegment = (title, data, onAdd) => (
-    <Grid item xs={12} md={4}>
+    <Grid item xs={12} md={3}>
       <Paper
         sx={{
           padding: 4,
@@ -148,7 +148,7 @@ const handleRemoveFile = (fileName) => {
   
           <Grid container spacing={1}>
             {/* Left Segment - Displays either Text Mode or Upload Mode */}
-            <Grid item xs={12} md={4} >
+            <Grid item xs={12} md={3} >
               {mode === 'text' ? (
                 <Grid container spacing={1} direction="column">
                   {renderSegment('Chief Complaint', chiefComplaints, () =>
@@ -166,7 +166,6 @@ const handleRemoveFile = (fileName) => {
                   sx={{
                     padding: 2,
                     backgroundColor: '#f8f9fa',
-                   
                     textAlign: 'center',
                   }}
                 >
@@ -229,12 +228,11 @@ const handleRemoveFile = (fileName) => {
             </Grid>
   
             {/* Right Segment - Placeholder for Future Data */}
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={9}>
               <Paper
                 sx={{
                   padding: 2,
                   backgroundColor: '#f8f9fa',
-                  
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

@@ -39,7 +39,7 @@ export default function CasePhotos({ selectedPatient }) {
       {selectedPatient ? (
         <>
          <Grid container spacing={1}>
-         <Grid item xs={12} md={4} >
+         <Grid item xs={12} md={3} >
          <Grid container spacing={1} direction="column">
          <Grid item xs={12} md={4}>
             <Paper
@@ -148,7 +148,7 @@ export default function CasePhotos({ selectedPatient }) {
                 </Grid>
           </Grid>
           </Grid>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={9}>
               <Paper
                 sx={{
                   padding: 2,

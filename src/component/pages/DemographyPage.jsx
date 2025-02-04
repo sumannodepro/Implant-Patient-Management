@@ -24,7 +24,7 @@ export default function DemographyPage({ selectedPatient }) {
       {selectedPatient ? (
         <Grid container spacing={1}>
           {/* Left Column: Patient Details */}
-          <Grid item xs={12} sm={6} lg={4}>
+          <Grid item xs={12} sm={6} lg={3}>
   <Paper
     sx={{
       padding: 4,
@@ -131,7 +131,7 @@ export default function DemographyPage({ selectedPatient }) {
   </Paper>
 </Grid>
           {/* Right Column: Patient History */}
-          <Grid item xs={12} sm={6} lg={8}>
+          <Grid item xs={12} sm={6} lg={9}>
               <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650, color: '#343a40',backgroundColor: '#f8f9fa' }} aria-label="patient history table">
                   <TableHead>

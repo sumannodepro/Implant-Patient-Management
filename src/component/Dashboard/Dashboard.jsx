@@ -71,7 +71,6 @@ export default function Dashboard({ signOut }) {
   
   const pages = [
     <MainDashboard/>,
-    <Home/>,
     <DemographyPage selectedPatient={selectedPatient} />,
     <ChiefComplaintPage 
     selectedPatient={selectedPatient}
@@ -197,13 +196,13 @@ export default function Dashboard({ signOut }) {
           {currentDateTime.date} | {currentDateTime.time}
         </Typography>
 
-          <IconButton
+  <IconButton
   sx={{
     backgroundColor: '#6c757d',
-    borderRadius: '8px',
+    borderRadius: '20px',
     color: '#ffffff',
     padding: '6px',
-    marginRight: 2,
+    marginRight: 1,
     height: '40px', // Set the height to match the TextField
     width: '40px',  // Ensure it's square for an icon
     '&:hover': {
@@ -222,7 +221,7 @@ export default function Dashboard({ signOut }) {
   variant="outlined"
   size="small"
   sx={{
-    marginRight: 2,
+    marginRight: 1,
     backgroundColor: '#6c757d',
     borderRadius: '8px',
     height: '40px', // Set the height to match the button
@@ -339,7 +338,7 @@ export default function Dashboard({ signOut }) {
             '& .MuiTabs-indicator': {
             backgroundColor: '#6c757d',},}}>
           <Tab icon={<DashboardIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Dashboard" />
-          <Tab icon={<HomeIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Home" />
+          
           <Tab icon={<PersonIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Demography" />
           <Tab icon={<HelpOutlineIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Chief Complaint" />
           <Tab icon={<VisibilityIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Case Photos" />

@@ -1,13 +1,37 @@
 import React from 'react'
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Grid, Paper } from '@mui/material';
 
 export default function PaymentRecordsPage({ selectedPatient }) {
   return (
     <Box sx={{ padding: 1 }}>
     {selectedPatient ? (
-    <Typography>Payment/Records content goes here...</Typography>
+    
+    <Grid container spacing={1}>
+          <Grid item xs={12} sm={8}>
+          <Paper
+        sx={{
+          padding: 4,
+          backgroundColor: '#f8f9fa'
+        }}>
+            <Typography variant="body1" color="textSecondary">
+              (e.g. Patient Payment Details)
+            </Typography>
+            </Paper>
+            {/* You can add more content for the left segment here */}
+          </Grid>
+          <Grid item xs={12} sm={4}>
+          <Paper
+        sx={{
+          padding: 4,
+          backgroundColor: '#f8f9fa'
+        }}>
+         <Typography variant="body1" color="textSecondary">
+              (e.g. Patient Payment History Info)
+            </Typography>
+            </Paper>
+          </Grid>
+        </Grid>
     ) : (
-   
     <Typography variant="h6" color="error" sx={{ textAlign: 'center' }}>
       Please select a patient to view payment/records.
     </Typography>

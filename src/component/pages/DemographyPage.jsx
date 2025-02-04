@@ -29,10 +29,9 @@ export default function DemographyPage({ selectedPatient }) {
     sx={{
       padding: 4,
       backgroundColor: '#f8f9fa',
-      borderRadius: 3,
+     
     }}>
     <Grid container spacing={1} alignItems="center">
-      {/* Avatar Section */}
       <Grid item xs={12} sx={{ textAlign: 'center' }}>
         <Avatar
           sx={{

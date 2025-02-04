@@ -23,6 +23,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import DoneIcon from '@mui/icons-material/Done';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import PaymentIcon from '@mui/icons-material/Payment';
@@ -37,6 +38,7 @@ import TreatmentDonePage from '../pages/TreatmentDonePage';
 import IOSViewerPage from '../pages/IOSViewerPage';
 import PrePage from '../pages/PrePage';
 import PostPage from '../pages/PostPage';
+import MainDashboard from '../pages/Dashboard';
 import PaymentRecordsPage from '../pages/PaymentRecordsPage';
 import AddPatientModal from '../AddPatientModal';
 import { API, graphqlOperation } from 'aws-amplify';
@@ -68,6 +70,7 @@ export default function Dashboard({ signOut }) {
   const [selectedPatient, setSelectedPatient] = React.useState(null);
   
   const pages = [
+    <MainDashboard/>,
     <Home/>,
     <DemographyPage selectedPatient={selectedPatient} />,
     <ChiefComplaintPage 
@@ -335,6 +338,7 @@ export default function Dashboard({ signOut }) {
             borderColor: 'divider',
             '& .MuiTabs-indicator': {
             backgroundColor: '#6c757d',},}}>
+          <Tab icon={<DashboardIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Dashboard" />
           <Tab icon={<HomeIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Home" />
           <Tab icon={<PersonIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Demography" />
           <Tab icon={<HelpOutlineIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Chief Complaint" />

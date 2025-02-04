@@ -176,7 +176,7 @@ Date: ___________________________
       <Grid container spacing={1}>
         {/* Treatment Suggested with Add icon on the right */}
         <Grid item xs={12} md={4}>
-          <Paper sx={{ padding: 2, backgroundColor: '#f8f9fa', borderRadius: 3 }}>
+          <Paper sx={{ padding: 2, backgroundColor: '#f8f9fa'}}>
             <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
               <Typography variant="h6" sx={{ color: '#343a40' }}>
                 Treatment Suggested
@@ -242,7 +242,7 @@ Date: ___________________________
           </Paper>
         </Grid>
         <Grid item xs={12} md={8}>
-        <Paper sx={{ padding: 2, backgroundColor: '#f8f9fa', borderRadius: 3 }}>
+        <Paper sx={{ padding: 2, backgroundColor: '#f8f9fa'}}>
             <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 3 }}>
               <Typography variant="h6" sx={{ color: '#343a40' }}>
                 Consent Form

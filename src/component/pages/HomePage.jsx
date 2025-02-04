@@ -74,8 +74,7 @@ export default function HomePage() {
           <Paper
             sx={{
               padding: 4,
-              backgroundColor: '#f8f9fa',
-              borderRadius: 3,
+              backgroundColor: '#f8f9fa'
             }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
               <Typography variant="h6" sx={{ color: '#343a40' }}>
@@ -96,7 +95,7 @@ export default function HomePage() {
         </Grid>
         {/* Today's Appointments Section */}
         <Grid item xs={12} md={9}>
-          <Paper sx={{ padding: 4, backgroundColor: '#f8f9fa', borderRadius: 3 }}>
+          <Paper sx={{ padding: 4, backgroundColor: '#f8f9fa'}}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
               <Typography variant="h6" sx={{ color: '#343a40' }}>
                 Today's Appointments

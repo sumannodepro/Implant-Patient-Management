@@ -83,7 +83,7 @@ const handleRemoveFile = (fileName) => {
         sx={{
           padding: 4,
           backgroundColor: '#f8f9fa',
-          borderRadius: 3,
+         
         }}
       >
         <Typography variant="h6" sx={{ color: '#343a40' }}>
@@ -166,7 +166,7 @@ const handleRemoveFile = (fileName) => {
                   sx={{
                     padding: 2,
                     backgroundColor: '#f8f9fa',
-                    borderRadius: 3,
+                   
                     textAlign: 'center',
                   }}
                 >
@@ -234,8 +234,7 @@ const handleRemoveFile = (fileName) => {
                 sx={{
                   padding: 2,
                   backgroundColor: '#f8f9fa',
-                  borderRadius: 3,
-                  minHeight: '200px', // Placeholder height
+                  
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

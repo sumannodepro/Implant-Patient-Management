@@ -46,7 +46,7 @@ export default function CasePhotos({ selectedPatient }) {
                sx={{
                padding: 4,
                backgroundColor: '#f8f9fa',
-              borderRadius: 3,}}>
+              }}>
              <Typography variant="h6" sx={{ color: '#343a40' }}>Pre-Treatment Photos</Typography>
               <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', marginTop: 1 }}>
               {prePhotos.length > 0 ? (
@@ -79,7 +79,7 @@ export default function CasePhotos({ selectedPatient }) {
                sx={{
                padding: 4,
                backgroundColor: '#f8f9fa',
-              borderRadius: 3,}}>
+              }}>
                <Typography variant="h6" sx={{ color: '#343a40' }}>Post-Treatment Photos</Typography>
               <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', marginTop: 1 }}>
               {prePhotos.length > 0 ? (
@@ -112,7 +112,7 @@ export default function CasePhotos({ selectedPatient }) {
                sx={{
                padding: 4,
                backgroundColor: '#f8f9fa',
-              borderRadius: 3,}}>
+              }}>
               <Typography variant="h6" sx={{ color: '#343a40' }}>Lab Reports (Images or PDFs)</Typography>
               <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', marginTop: 1 }}>
               {prePhotos.length > 0 ? (
@@ -153,8 +153,6 @@ export default function CasePhotos({ selectedPatient }) {
                 sx={{
                   padding: 2,
                   backgroundColor: '#f8f9fa',
-                  borderRadius: 3,
-                  minHeight: '200px', // Placeholder height
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

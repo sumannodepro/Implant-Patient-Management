@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, Paper, Grid, Modal, IconButton, TextField, Button,Popper,MenuItem } from '@mui/material';
+import { Typography, Box, Paper, Grid, Modal, IconButton, TextField, Button,Popper,MenuItem,GlobalStyles } from '@mui/material';
 import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listPatients } from '../../graphql/queries';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
 const localizer = momentLocalizer(moment);
 
@@ -103,47 +104,126 @@ export default function Dashboard() {
 
   return (
     <Box sx={{ padding: 1 }}>
-      <Grid container spacing={1}>
-        {/* Right Panel: Full Calendar */}
-        <Grid item xs={12} md={12}>
-          <Paper sx={{ padding: 2, backgroundColor: '#f8f9fa', height: '100vh' }}>
-            <Calendar
-              localizer={localizer}
-              events={events}
-              startAccessor="start"
-              endAccessor="end"
-              style={{ height: '95vh' }}
-              views={{ month: true, week: true, day: true }}
-              defaultView={Views.WEEK}
-              step={30}
-              timeslots={1}
-              selectable
-              onSelectEvent={handleEventSelect}
-              // Disable past dates entirely
-              min={new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 7, 0)} // Clinic working hours start at 7:00 AM
-              max={new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 18, 0)} // Clinic working hours end at 6:00 PM
-              // Disable past times for the current day, making sure only future slots are selectable
-              onSelectSlot={(slotInfo) => {
-                if (slotInfo.start < new Date()) {
-                  return; // Do nothing if it's a past date
-                }
-                handleSlotSelect(slotInfo);
-              }}
-              eventPropGetter={(event) => ({
-                style: {
-                  backgroundColor: '#a3a8ac',
-                  color: '#343a40',
-                  borderRadius: '5px',
-                  border: 'none',
-                  padding: '5px',
-                },
-              })}
-              
-            />
-          </Paper>
-        </Grid>
-      </Grid>
+     <GlobalStyles
+  styles={{
+    '.rbc-toolbar': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between', // Space between left, center, and right
+      position: 'relative', // Allows absolute positioning for centering
+    },
+    '.rbc-toolbar-label': {
+      fontWeight: 'bold !important',
+      fontSize: '24px !important',
+      position: 'absolute',
+      left: '50%',
+      transform: 'translateX(-50%)', // Perfect center alignment
+      textAlign: 'center',
+    },
+    '.rbc-toolbar .rbc-btn-group:first-of-type': {
+      display: 'none', // Hide "Today" button
+    },
+    '.rbc-toolbar button': {
+      backgroundColor: '#343a40 !important', // Base color
+      color: '#ffffff !important',
+      borderRadius: '5px',
+      border: 'none',
+      padding: '5px 10px',
+      margin: '0 5px', // Add some spacing
+    },
+    '.rbc-toolbar button:hover': {
+      backgroundColor: '#6c757d !important', // Lighter shade for hover
+    },
+    '.rbc-toolbar button:active': {
+      backgroundColor: '#7f8c8d !important', // Darker shade for active
+    },
+    '.rbc-toolbar .rbc-active': {
+      backgroundColor: '#7f8c8d !important', // Active (current view button)
+      color: '#ffffff !important',
+    },
+  }}
+/>
 
+<Grid container spacing={1}>
+  <Grid item xs={12} md={12}>
+    <Paper sx={{ padding: 2, backgroundColor: '#f8f9fa', height: '100vh' }}>
+      <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: '95vh' }}
+        views={{ month: true, week: true, day: true }}
+        defaultView={Views.WEEK}
+        step={30}
+        timeslots={1}
+        selectable
+        onSelectEvent={handleEventSelect}
+        min={new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate(),
+          7,
+          0
+        )}
+        max={new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate(),
+          18,
+          0
+        )}
+        onSelectSlot={(slotInfo) => {
+          if (slotInfo.start < new Date()) {
+            return;
+          }
+          handleSlotSelect(slotInfo);
+        }}
+        eventPropGetter={(event) => ({
+          style: {
+            backgroundColor: '#343a40',
+            color: '#ffffff',
+            borderRadius: '5px',
+            border: 'none',
+            padding: '5px',
+          },
+        })}
+        components={{
+          toolbar: (toolbarProps) => (
+            <div className="rbc-toolbar">
+              {/* Left: Back & Next Buttons */}
+              <div>
+                <IconButton onClick={() => toolbarProps.onNavigate('PREV')}>
+                  <ArrowBack sx={{ color: 'white' }} />
+                </IconButton>
+                <IconButton onClick={() => toolbarProps.onNavigate('NEXT')}>
+                  <ArrowForward sx={{ color: 'white' }} />
+                </IconButton>
+              </div>
+
+              {/* Center: Date Label */}
+              <span className="rbc-toolbar-label">{toolbarProps.label}</span>
+
+              {/* Right: View Buttons */}
+              <div className="rbc-btn-group">
+                {['month', 'week', 'day'].map((view) => (
+                  <button
+                    key={view}
+                    type="button"
+                    className={`rbc-button ${toolbarProps.view === view ? 'rbc-active' : ''}`}
+                    onClick={() => toolbarProps.onView(view)}
+                  >
+                    {view.charAt(0).toUpperCase() + view.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ),
+        }}
+      />
+    </Paper>
+  </Grid>
+</Grid>
       {/* Appointment Modal */}
       <Modal open={openAppointmentModal} onClose={handleClose}>
   <Box

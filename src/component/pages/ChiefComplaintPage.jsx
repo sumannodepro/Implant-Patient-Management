@@ -158,7 +158,12 @@ const handleRemoveFile = (fileName) => {
     <Box sx={{ padding: 1 }}>
       {selectedPatient ? (
         <>
-          <Box display="flex" justifyContent="flex-start" mb={1}>
+          
+  
+          <Grid container spacing={1}>
+            {/* Left Segment - Displays either Text Mode or Upload Mode */}
+            <Grid item xs={12} md={3} >
+            <Box display="flex" justifyContent="flex-start" mb={1}>
             <ToggleButtonGroup
               value={mode}
               exclusive
@@ -177,14 +182,10 @@ const handleRemoveFile = (fileName) => {
                 Text Mode
               </ToggleButton>
               <ToggleButton value="upload" aria-label="Upload Mode">
-                Upload Mode
+                Image Mode
               </ToggleButton>
             </ToggleButtonGroup>
           </Box>
-  
-          <Grid container spacing={1}>
-            {/* Left Segment - Displays either Text Mode or Upload Mode */}
-            <Grid item xs={12} md={3} >
               {mode === 'text' ? (
                 <Grid container spacing={1} direction="column">
                   {renderSegment('Chief Complaint', chiefComplaints, () =>

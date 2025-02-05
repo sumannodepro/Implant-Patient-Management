@@ -1,13 +1,47 @@
 import React, { useState } from 'react';
-import { Typography, Box, Button, IconButton, Dialog,Grid,Paper } from '@mui/material';
+import { Typography, Box, Button, IconButton, Dialog,Grid,Paper,Table, TableBody, TableCell, TableContainer, TableHead, TableRow, } from '@mui/material';
 import { PhotoCamera, Delete, Visibility } from '@mui/icons-material';
-
-export default function CasePhotos({ selectedPatient }) {
+import { CSVLink } from 'react-csv';
+import { TextField } from '@mui/material';
+export default function CasePhotos({ selectedPatient, casePhotoRecords }) {
   const [prePhotos, setPrePhotos] = useState([]);
   const [postPhotos, setPostPhotos] = useState([]);
   const [labReports, setLabReports] = useState([]);
   const [previewFile, setPreviewFile] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
+    const handleSort = (key) => {
+      let direction = 'asc';
+      if (sortConfig.key === key && sortConfig.direction === 'asc') {
+        direction = 'desc';
+      }
+      setSortConfig({ key, direction });
+    };
+
+    const sortedRecords = [...(casePhotoRecords || [])].sort((a, b) => {
+      if (!sortConfig.key) return 0;
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
+      return sortConfig.direction === 'asc' ? (aValue > bValue ? 1 : -1) : (aValue < bValue ? 1 : -1);
+    });
+
+    const filteredRecords = sortedRecords.filter(record =>
+      record.chiefComplaints.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+  const csvData = [
+    ["Patient ID", "Patient Name", "Mobile Number", "Chief Complaints","Findings","Dianosis", "Date"],
+    ...filteredRecords.map(record => [
+      selectedPatient.patientID,
+      selectedPatient.patientName,
+      selectedPatient.mobileNumber,
+      record.chiefComplaints,
+      record.findings,
+      record.diagnosis,
+      record.date,
+    ])
+  ];
   const handleFileChange = (event, type) => {
     const files = Array.from(event.target.files);
     const newFiles = files.map((file) => ({
@@ -69,7 +103,7 @@ export default function CasePhotos({ selectedPatient }) {
             '&:hover': {
               backgroundColor: '#23272b',
             }, }}>
-                Upload Pre-Treatment
+                 Pre-Treatment
                 <input type="file" hidden accept="image/*" multiple onChange={(e) => handleFileChange(e, 'pre')} />
               </Button>
             </Paper>
@@ -102,7 +136,7 @@ export default function CasePhotos({ selectedPatient }) {
             '&:hover': {
               backgroundColor: '#23272b',
             }, }}>
-                Upload Post-Treatment
+                Post-Treatment
                 <input type="file" hidden accept="image/*" multiple onChange={(e) => handleFileChange(e, 'post')} />
               </Button>
                 </Paper>
@@ -141,7 +175,7 @@ export default function CasePhotos({ selectedPatient }) {
             '&:hover': {
               backgroundColor: '#23272b',
             }, }}>
-                Upload Lab Reports
+                 Lab Reports
                 <input type="file" hidden accept="image/*,application/pdf" multiple onChange={(e) => handleFileChange(e, 'lab')} />
               </Button>
                 </Paper>
@@ -149,18 +183,59 @@ export default function CasePhotos({ selectedPatient }) {
           </Grid>
           </Grid>
           <Grid item xs={12} md={9}>
-              <Paper
+            <Paper
                 sx={{
-                  padding: 2,
+                  padding: 0,
                   backgroundColor: '#f8f9fa',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
                 }}>
-                <Typography variant="body1" color="textSecondary">
-                  Past Data Will Be Displayed Here
-                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 1 }}>
+                  <TextField
+                    label="Search Case Photos"
+                    variant="outlined"
+                    size="small"
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <CSVLink data={csvData} filename={`ChiefRecords_${selectedPatient.patientID}.csv`}>
+                    <Button variant="contained" size="small" sx={{
+                      backgroundColor: '#343a40',
+                      }}>Export CSV</Button>
+                  </CSVLink>
+                  </Box>
+                  <TableContainer component={Paper}>
+                  <Table stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell onClick={() => handleSort('date')}><strong>Date</strong></TableCell>
+                        <TableCell onClick={() => handleSort('chiefComplaint')}><strong>Pre-Treatment Photos</strong></TableCell>
+                        <TableCell onClick={() => handleSort('findings')}><strong>Post-Treatment Photos</strong></TableCell>
+                        <TableCell onClick={() => handleSort('diagnosis')}><strong>Lab Reports</strong></TableCell>
+                        
+                        <TableCell><strong>Action</strong></TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {filteredRecords.length > 0 ? (
+                        filteredRecords.map((record, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{record.treatmentName}</TableCell>
+                            <TableCell>${record.date}</TableCell>
+                            <TableCell>
+                              <Button variant="contained" size="small" color="primary">
+                                View
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={5} align="center">
+                            No treatment records available.
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Paper>
             </Grid>
           </Grid>

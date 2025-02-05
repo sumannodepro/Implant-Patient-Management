@@ -36,8 +36,7 @@ import CasePhotos from '../pages/CasePhotos';
 import TreatmentSuggestedPage from '../pages/TreatmentSuggestedPage';
 import TreatmentDonePage from '../pages/TreatmentDonePage';
 import IOSViewerPage from '../pages/IOSViewerPage';
-import PrePage from '../pages/PrePage';
-import PostPage from '../pages/PostPage';
+import PrePostPage from '../pages/PrePostPage';
 import MainDashboard from '../pages/Dashboard';
 import PaymentRecordsPage from '../pages/PaymentRecordsPage';
 import AddPatientModal from '../AddPatientModal';
@@ -94,8 +93,7 @@ export default function Dashboard({ signOut }) {
     selectedTreatments={selectedTreatments}
     setSelectedTreatments={setSelectedTreatments}/>,
     <IOSViewerPage selectedPatient={selectedPatient}/>,
-    <PrePage selectedPatient={selectedPatient}/>,
-    <PostPage selectedPatient={selectedPatient}/>,
+    <PrePostPage selectedPatient={selectedPatient}/>,
     <TreatmentDonePage selectedPatient={selectedPatient}/>,
     <PaymentRecordsPage selectedPatient={selectedPatient}/>
   ];
@@ -338,18 +336,15 @@ export default function Dashboard({ signOut }) {
             '& .MuiTabs-indicator': {
             backgroundColor: '#6c757d',},}}>
           <Tab icon={<DashboardIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Dashboard" />
-          
           <Tab icon={<PersonIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Demography" />
           <Tab icon={<HelpOutlineIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Chief Complaint" />
           <Tab icon={<VisibilityIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Case Photos" />
           <Tab icon={<HealthAndSafetyIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Treatment Suggested" />
           <Tab icon={<FolderOpenIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="IOS Viewer" />
           <Tab icon={<AssessmentOutlinedIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Pre Page" />
-          <Tab icon={<CheckCircleOutlineIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Post Page" />
           <Tab icon={<DoneIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Treatment Done" />
           <Tab icon={<PaymentIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Payment Records" />
         </Tabs>
-
         <Box sx={{ paddingTop: 2 }}>
           {pages[value]}
         </Box>

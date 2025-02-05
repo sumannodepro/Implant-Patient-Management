@@ -44,7 +44,7 @@ export default function CasePhotos({ selectedPatient }) {
          <Grid item xs={12} md={4}>
             <Paper
                sx={{
-               padding: 4,
+               padding: 2,
                backgroundColor: '#f8f9fa',
               }}>
              <Typography variant="h6" sx={{ color: '#343a40' }}>Pre-Treatment Photos</Typography>
@@ -77,7 +77,7 @@ export default function CasePhotos({ selectedPatient }) {
           <Grid item xs={12} md={4}>
             <Paper
                sx={{
-               padding: 4,
+               padding: 2,
                backgroundColor: '#f8f9fa',
               }}>
                <Typography variant="h6" sx={{ color: '#343a40' }}>Post-Treatment Photos</Typography>
@@ -110,7 +110,7 @@ export default function CasePhotos({ selectedPatient }) {
                 <Grid item xs={12} md={4}>
             <Paper
                sx={{
-               padding: 4,
+               padding: 2,
                backgroundColor: '#f8f9fa',
               }}>
               <Typography variant="h6" sx={{ color: '#343a40' }}>Lab Reports (Images or PDFs)</Typography>

@@ -81,7 +81,7 @@ const handleRemoveFile = (fileName) => {
     <Grid item xs={12} md={3}>
       <Paper
         sx={{
-          padding: 4,
+          padding: 2,
           backgroundColor: '#f8f9fa',
          
         }}

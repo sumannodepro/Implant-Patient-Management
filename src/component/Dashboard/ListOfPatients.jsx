@@ -135,7 +135,6 @@ const ListOfPatients = ({ selectedPatient, setSelectedPatient }) => {
               >
                 {letter}
               </Typography>
-
               {groupedPatients[letter].map((patient) => (
                 <ListItem key={patient.patientID} disablePadding>
                   <ListItemButton

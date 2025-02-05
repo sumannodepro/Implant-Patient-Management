@@ -1,52 +1,92 @@
-import React, { useState } from 'react';
-import { Typography, Box, Paper, Grid, Modal, IconButton, TextField, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Typography, Box, Paper, Grid, Modal, IconButton, TextField, Button,Popper,MenuItem } from '@mui/material';
 import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import CloseIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
+import { API, graphqlOperation } from 'aws-amplify';
+import { listPatients } from '../../graphql/queries';
 
 const localizer = momentLocalizer(moment);
 
 export default function Dashboard() {
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [openAppointmentModal, setOpenAppointmentModal] = useState(false);
+  const [openEventModal, setOpenEventModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [complaint, setComplaint] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [anchorElq, setAnchorElq] = useState(null);  // Anchor for the Popper
+  
+  useEffect(() => {
+    setCurrentDate(new Date()); // Update currentDate on mount
+  }, []);
 
+  const handleEventSelect = (event) => {
+    setSelectedEvent(event);
+    setOpenEventModal(true);
+  };
+  
   const handleSlotSelect = (slotInfo) => {
     setSelectedDate(dayjs(slotInfo.start));  // Use dayjs for consistency
-    setOpen(true);
+    setOpenAppointmentModal(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenAppointmentModal(false);
+    setOpenEventModal(false);
     setSelectedDate(null);
     setSelectedPatient(null);
     setComplaint('');
     setSearchQuery('');  // Reset the search query
   };
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+  const handleSearchChange = async (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+  
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+  
+    try {
+      const response = await API.graphql(
+        graphqlOperation(listPatients, {
+          filter: {
+            or: [
+              { patientName: { contains: query.trim() } },
+              { patientID: { contains: query.trim() } },
+              { mobileNumber: { contains: query.trim() } },
+            ],
+          },
+        })
+      );
+  
+      const results = response.data.listPatients.items;
+      setSearchResults(results);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
+  
+  const handleSearchFocus = (event) => {
+    setAnchorElq(event.target);
   };
 
   const handleSelectPatient = (patient) => {
     setSelectedPatient(patient);
+    setSearchQuery(patient.patientName); // Optionally show the selected patient's name in the search box
+    setSearchResults([]);  // Clear search results after selection
+    setAnchorElq(null); 
   };
+  
 
   // Simulating a list of patients (this could come from your database)
-  const patients = [
-    { patientID: '1', patientName: 'John Doe' },
-    { patientID: '2', patientName: 'Jane Smith' },
-    { patientID: '3', patientName: 'Michael Johnson' },
-    { patientID: '4', patientName: 'Emily Davis' },
-  ];
-
-  const filteredPatients = patients.filter(patient =>
-    patient.patientName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const events = [
     {
@@ -78,9 +118,17 @@ export default function Dashboard() {
               step={30}
               timeslots={1}
               selectable
-              min={new Date(2025, 1, 5, 7, 0)}
-              max={new Date(2025, 1, 5, 18, 0)}
-              onSelectSlot={handleSlotSelect}
+              onSelectEvent={handleEventSelect}
+              // Disable past dates entirely
+              min={new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 7, 0)} // Clinic working hours start at 7:00 AM
+              max={new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 18, 0)} // Clinic working hours end at 6:00 PM
+              // Disable past times for the current day, making sure only future slots are selectable
+              onSelectSlot={(slotInfo) => {
+                if (slotInfo.start < new Date()) {
+                  return; // Do nothing if it's a past date
+                }
+                handleSlotSelect(slotInfo);
+              }}
               eventPropGetter={(event) => ({
                 style: {
                   backgroundColor: '#a3a8ac',
@@ -90,12 +138,117 @@ export default function Dashboard() {
                   padding: '5px',
                 },
               })}
+              
             />
           </Paper>
         </Grid>
       </Grid>
 
-      <Modal open={open} onClose={handleClose}>
+      {/* Appointment Modal */}
+      <Modal open={openAppointmentModal} onClose={handleClose}>
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 400,
+      bgcolor: 'background.paper',
+      borderRadius: 2,
+      boxShadow: 24,
+      p: 2,
+    }}
+  >
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+      <Typography variant="h6">Appointment</Typography>
+      <IconButton onClick={handleClose}>
+        <CloseIcon />
+      </IconButton>
+    </Box>
+    
+    {/* Display Selected Date */}
+    {/* Display Selected Date & Time */}
+    <TextField
+      fullWidth
+      label="Selected Date and Time"
+      variant="outlined"
+      size="medium"
+      value={selectedDate ? selectedDate.format('YYYY-MM-DD HH:mm') : ''}
+      InputProps={{
+        readOnly: true,
+      }}
+      sx={{ marginBottom: 2 }}
+    />
+    {/* Patient Search */}
+    <TextField
+      fullWidth
+      label="Search for Patient"
+      variant="outlined"
+      size="medium"
+      value={searchQuery}
+      onChange={handleSearchChange}  // Trigger GraphQL search
+      onFocus={handleSearchFocus}
+      sx={{ marginBottom: 2 }}
+    />
+
+    {/* Popper for displaying search results */}
+    <Popper
+      open={Boolean(anchorElq) && searchResults.length > 0}  // Show only when results exist
+      anchorEl={anchorElq}  // Anchor to the TextField
+      placement="bottom-start"  // Position below TextField
+      sx={{
+        marginTop: '8px',
+        zIndex: 2000,
+      }}
+    >
+      <Paper
+        sx={{
+          maxHeight: 200,
+          overflowY: 'auto',
+          width: anchorElq ? `${anchorElq.offsetWidth}px` : 'auto',
+          boxShadow: 3,
+          backgroundColor: '#fff',
+          borderRadius: 1,
+        }}
+      >
+        {searchResults.map((patient) => (
+          <MenuItem key={patient.patientID} onClick={() => handleSelectPatient(patient)}>
+            {patient.patientName}
+          </MenuItem>
+        ))}
+      </Paper>
+    </Popper>
+
+    {/* Complaint Input */}
+    <TextField
+      fullWidth
+      label="Enter Complaint"
+      variant="outlined"
+      size="medium"
+      value={complaint}
+      onChange={(e) => setComplaint(e.target.value)}
+      sx={{ marginBottom: 2 }}
+    />
+    {/* Confirm Button */}
+    <Button
+      variant="contained"
+      color="primary"
+      fullWidth
+      onClick={handleClose}
+      sx={{
+        marginTop: 2,
+        backgroundColor: '#343a40',
+        '&:hover': { backgroundColor: '#495057' },
+      }}
+    >
+      OK
+    </Button>
+  </Box>
+</Modal>
+
+
+      {/* Event Modal */}
+      <Modal open={openEventModal} onClose={handleClose}>
         <Box
           sx={{
             position: 'absolute',
@@ -110,80 +263,21 @@ export default function Dashboard() {
           }}
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant="h6">Appointment</Typography>
+            <Typography variant="h6">Event Details</Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
           </Box>
 
-          {/* Complaint Input */}
-          <TextField
-            fullWidth
-            label="Enter Complaint"
-            variant="outlined"
-            size="medium"
-            value={complaint}
-            onChange={(e) => setComplaint(e.target.value)}
-            sx={{ marginBottom: 2 }}
-          />
-
-          {/* Display Selected Date & Time */}
-          <TextField
-            fullWidth
-            label="Selected Date and Time"
-            variant="outlined"
-            size="medium"
-            value={selectedDate ? selectedDate.format('YYYY-MM-DD HH:mm') : ''}
-            InputProps={{
-              readOnly: true,
-            }}
-            sx={{ marginBottom: 2 }}
-          />
-
-          {/* Patient Search */}
-          <TextField
-            fullWidth
-            label="Search for Patient"
-            variant="outlined"
-            size="medium"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            sx={{ marginBottom: 2 }}
-          />
-
-          {/* Display Filtered Patients */}
-          <Box sx={{ marginBottom: 2 }}>
-            {filteredPatients.length > 0 ? (
-              filteredPatients.map(patient => (
-                <Button
-                  key={patient.patientID}
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => handleSelectPatient(patient)}
-                  sx={{ marginBottom: 1 }}
-                >
-                  {patient.patientName}
-                </Button>
-              ))
-            ) : (
-              <Typography variant="body2" sx={{ color: '#6c757d' }}>
-                No patients found.
-              </Typography>
-            )}
-          </Box>
-
-          {/* Display Selected Patient */}
-          {selectedPatient ? (
+          {/* Display Event Title */}
+          {selectedEvent && (
             <Box sx={{ marginBottom: 2 }}>
-              <Typography variant="body1">Selected Patient: {selectedPatient.patientName}</Typography>
+              <Typography variant="body1"><strong>Title:</strong> {selectedEvent.title}</Typography>
+              <Typography variant="body1"><strong>Start:</strong> {selectedEvent.start.toLocaleString()}</Typography>
+              <Typography variant="body1"><strong>End:</strong> {selectedEvent.end.toLocaleString()}</Typography>
             </Box>
-          ) : (
-            <Typography variant="body2" sx={{ marginBottom: 2, color: '#6c757d' }}>
-              Please select a patient.
-            </Typography>
           )}
 
-          {/* Confirm Button */}
           <Button
             variant="contained"
             color="primary"
@@ -195,7 +289,7 @@ export default function Dashboard() {
               '&:hover': { backgroundColor: '#495057' },
             }}
           >
-            OK
+            Close
           </Button>
         </Box>
       </Modal>

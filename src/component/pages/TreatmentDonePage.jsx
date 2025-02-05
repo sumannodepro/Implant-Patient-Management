@@ -9,7 +9,7 @@ export default function TreatmentDonePage({ selectedPatient }) {
           <Grid item xs={12} sm={8}>
           <Paper
         sx={{
-          padding: 4,
+          padding: 2,
           backgroundColor: '#f8f9fa'
         }}>
             <Typography variant="body1" color="textSecondary">
@@ -21,7 +21,7 @@ export default function TreatmentDonePage({ selectedPatient }) {
           <Grid item xs={12} sm={4}>
           <Paper
         sx={{
-          padding: 4,
+          padding: 2,
           backgroundColor: '#f8f9fa'
         }}>
          <Typography variant="body1" color="textSecondary">

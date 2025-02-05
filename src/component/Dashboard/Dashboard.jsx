@@ -94,8 +94,10 @@ export default function Dashboard({ signOut }) {
     setSelectedTreatments={setSelectedTreatments}/>,
     <IOSViewerPage selectedPatient={selectedPatient}/>,
     <PrePostPage selectedPatient={selectedPatient}/>,
-    <TreatmentDonePage selectedPatient={selectedPatient}/>,
-    <PaymentRecordsPage selectedPatient={selectedPatient}/>
+    <TreatmentDonePage selectedPatient={selectedPatient}
+    selectedTreatments={selectedTreatments}/>,
+    <PaymentRecordsPage selectedPatient={selectedPatient}
+    selectedTreatments={selectedTreatments}/>
   ];
 
   const handleMenu = (event) => {
@@ -341,7 +343,7 @@ export default function Dashboard({ signOut }) {
           <Tab icon={<VisibilityIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Case Photos" />
           <Tab icon={<HealthAndSafetyIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Treatment Suggested" />
           <Tab icon={<FolderOpenIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="IOS Viewer" />
-          <Tab icon={<AssessmentOutlinedIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Pre Page" />
+          <Tab icon={<AssessmentOutlinedIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Pre/Post Page" />
           <Tab icon={<DoneIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Treatment Done" />
           <Tab icon={<PaymentIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Payment Records" />
         </Tabs>

@@ -11,13 +11,14 @@ import {
   List,
   ListItem,
   ListItemText,
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-
+import { CSVLink } from 'react-csv';
 export default function ComplaintPage({
   chiefComplaints,
   setChiefComplaints,
@@ -26,6 +27,7 @@ export default function ComplaintPage({
   diagnosis,
   setDiagnosis,
   selectedPatient,
+  chiefRecords,
 }) {
   const [mode, setMode] = useState('text');
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -33,6 +35,40 @@ export default function ComplaintPage({
   const [modalTitle, setModalTitle] = useState('');
   const [currentEntry, setCurrentEntry] = useState('');
   const [entries, setEntries] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+    const handleSort = (key) => {
+      let direction = 'asc';
+      if (sortConfig.key === key && sortConfig.direction === 'asc') {
+        direction = 'desc';
+      }
+      setSortConfig({ key, direction });
+    };
+
+    const sortedRecords = [...(chiefRecords || [])].sort((a, b) => {
+      if (!sortConfig.key) return 0;
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
+      return sortConfig.direction === 'asc' ? (aValue > bValue ? 1 : -1) : (aValue < bValue ? 1 : -1);
+    });
+
+    const filteredRecords = sortedRecords.filter(record =>
+      record.chiefComplaints.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+  const csvData = [
+    ["Patient ID", "Patient Name", "Mobile Number", "Chief Complaints","Findings","Dianosis", "Date"],
+    ...filteredRecords.map(record => [
+      selectedPatient.patientID,
+      selectedPatient.patientName,
+      selectedPatient.mobileNumber,
+      record.chiefComplaints,
+      record.findings,
+      record.diagnosis,
+      record.date,
+    ])
+  ];
 
   const handleToggle = (event, newMode) => {
     if (newMode !== null) {
@@ -231,16 +267,57 @@ const handleRemoveFile = (fileName) => {
             <Grid item xs={12} md={9}>
               <Paper
                 sx={{
-                  padding: 2,
+                  padding: 0,
                   backgroundColor: '#f8f9fa',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
                 }}>
-                <Typography variant="body1" color="textSecondary">
-                  Past Data Will Be Displayed Here
-                </Typography>
+               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 1 }}>
+                  <TextField
+                    label="Search Chief Complaint"
+                    variant="outlined"
+                    size="small"
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <CSVLink data={csvData} filename={`ChiefRecords_${selectedPatient.patientID}.csv`}>
+                    <Button variant="contained" size="small" sx={{
+                  backgroundColor: '#343a40',
+                }}>Export CSV</Button>
+                  </CSVLink>
+                </Box>
+                <TableContainer component={Paper}>
+                  <Table stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell onClick={() => handleSort('date')}><strong>Date</strong></TableCell>
+                        <TableCell onClick={() => handleSort('chiefComplaint')}><strong>Chief Complaint</strong></TableCell>
+                        <TableCell onClick={() => handleSort('findings')}><strong>Findings</strong></TableCell>
+                        <TableCell onClick={() => handleSort('diagnosis')}><strong>Diagnosis</strong></TableCell>
+                        
+                        <TableCell><strong>Action</strong></TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {filteredRecords.length > 0 ? (
+                        filteredRecords.map((record, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{record.treatmentName}</TableCell>
+                            <TableCell>${record.date}</TableCell>
+                            <TableCell>
+                              <Button variant="contained" size="small" color="primary">
+                                View
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={5} align="center">
+                            No treatment records available.
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Paper>
             </Grid>
           </Grid>

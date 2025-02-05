@@ -127,19 +127,20 @@ export default function TreatmentSuggestedPage({selectedPatient,leftValue,setLef
   const handleRightChange = (event) => {
     setRightValue(event.target.value)
   };
-  const handleTreatmentCheckboxChange = (event, treatmentName) => {
+  const handleTreatmentCheckboxChange = (event, treatment) => {
     if (event.target.checked) {
-      setSelectedTreatments((prev) => [...prev, treatmentName]);
+      setSelectedTreatments((prev) => [...prev, treatment]); // Store full treatment object
     } else {
-      setSelectedTreatments((prev) => prev.filter((id) => id !== treatmentName));
+      setSelectedTreatments((prev) => prev.filter((t) => t.treatmentName !== treatment.treatmentName));
     }
   };
-  const consentFormText = `
-Consent for Treatment
+const treatmentNames = selectedTreatments.map(treatment => treatment.treatmentName).join(', ');
 
-I, [${rightValue === 'Patient' ? 'PATIENT NAME' : guardianName}], desire to avail medical services at this facility and give my agreement to accept their services related to diagnosis and care of my medical condition.
+const consentFormText = `Consent for Treatment
 
-I hereby give consent to Dr. [${leftValue === 'Dr.Suman Bohra' ? 'Dr.Suman Bohra' : 'Doctor Name'}] to perform the following treatment(s): [${selectedTreatments.join(', ')}] on me or my dependent as follows: [${selectedTreatments.join(', ')}], and any such additional procedure(s) as may be considered necessary for my well-being based on findings made during the course of the [${selectedTreatments.join(', ')}]. The nature and purpose of the [${selectedTreatments.join(', ')}] have been explained to me, and no guarantee has been made or implied as to result or cure. I have been given satisfactory answers to all my questions and wish to proceed with the [${selectedTreatments.join(', ')}].
+I, [${rightValue === 'Patient' ? selectedPatient.patientName : guardianName}], desire to avail medical services at this facility and give my agreement to accept their services related to diagnosis and care of my medical condition.
+
+I hereby give consent to Dr. [${leftValue === 'Dr.Suman Bohra' ? 'Dr.Suman Bohra' : 'Doctor Name'}] to perform the following treatment(s): [${treatmentNames}] on me or my dependent as follows: [${treatmentNames}], and any such additional procedure(s) as may be considered necessary for my well-being based on findings made during the course of the [${treatmentNames}]. The nature and purpose of the [${treatmentNames}] have been explained to me, and no guarantee has been made or implied as to result or cure. I have been given satisfactory answers to all my questions and wish to proceed with the [${treatmentNames}].
 
 Acknowledgement:
 
@@ -157,7 +158,7 @@ Signature: ________________________________
 
 Relationship to Patient: [${rightValue === 'Patient' ? 'Self' : 'Parent/Guardian'}]
 
-Name: [${rightValue === 'Patient' ? 'PATIENT NAME' : guardianName}]
+Name: [${rightValue === 'Patient' ? selectedPatient.patientName : guardianName}]
 
 Date: ___________________________
 `;
@@ -220,8 +221,8 @@ Date: ___________________________
                       <TableRow key={treatment.id}>
                         <TableCell padding="checkbox">
                           <Checkbox 
-                          checked={selectedTreatments.includes(treatment.treatmentName)}
-                          onChange={(e) => handleTreatmentCheckboxChange(e, treatment.treatmentName)}/>
+                          checked={selectedTreatments.some((t) => t.treatmentName === treatment.treatmentName)}
+                          onChange={(e) => handleTreatmentCheckboxChange(e, treatment)}/>
                         </TableCell>
                         <TableCell>{treatment.treatmentName}</TableCell>
                         <TableCell>₹{treatment.price}</TableCell>

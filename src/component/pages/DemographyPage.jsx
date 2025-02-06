@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
-import { Box, Typography, Paper, Grid, Table, TableBody,TextField, TableCell, TableContainer, TableHead, TableRow,Modal, IconButton, Button, Avatar } from '@mui/material';
+import { Box, Typography, Paper, Grid, Table, TableBody,TextField, TableCell, TableContainer, TableHead, TableRow,Modal, IconButton, } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CloseIcon from '@mui/icons-material/Close';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
-
+import { Avatar, Button, } from '@mui/material';
+import { Phone as PhoneIcon, Email as EmailIcon, Home as HomeIcon, Cake as CakeIcon, 
+  AccessibilityNew as AccessibilityNewIcon, Bloodtype as BloodtypeIcon, Wc as WcIcon } from '@mui/icons-material'
+import AddIcon from '@mui/icons-material/Add';
 export default function DemographyPage({ selectedPatient }) {
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [medicalHistory, setMedicalHistory] = useState([]);
+  const [newHistory, setNewHistory] = useState({ date: '', condition: '', treatment: '', status: '' });
+  const handleAddHistory = () => {
+    // Add the new history to the state array
+    setMedicalHistory([...medicalHistory, { ...newHistory, date: new Date().toLocaleDateString() }]);
+    setNewHistory({ date: '', condition: '', treatment: '', status: '' });
+  };
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleView = (patient) => {
@@ -27,7 +37,7 @@ export default function DemographyPage({ selectedPatient }) {
           <Grid item xs={12} sm={6} lg={3}>
   <Paper
     sx={{
-      padding: 4,
+      padding: 2,
       backgroundColor: '#f8f9fa',
      
     }}>
@@ -60,15 +70,10 @@ export default function DemographyPage({ selectedPatient }) {
       {/* Patient Details */}
       <Grid item xs={12}>
         <Grid container spacing={2}>
-          {/* Patient ID */}
-          <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#495057' }}>
-              ID: {selectedPatient.patientID || 'N/A'}
-            </Typography>
-          </Grid>
+         
 
           {/* Mobile Number */}
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={8}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#495057' }}>
               Mobile: {selectedPatient.mobileNumber || 'N/A'}
             </Typography>
@@ -132,6 +137,10 @@ export default function DemographyPage({ selectedPatient }) {
 </Grid>
           {/* Right Column: Patient History */}
           <Grid item xs={12} sm={6} lg={9}>
+          <Paper sx={{ padding: 0, backgroundColor: '#f8f9fa' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#343a40',marginLeft: 2  }}>
+            Last Appointment Details
+          </Typography>
               <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650, color: '#343a40',backgroundColor: '#f8f9fa' }} aria-label="patient history table">
                   <TableHead>
@@ -158,7 +167,61 @@ export default function DemographyPage({ selectedPatient }) {
                   </TableBody>
                 </Table>
               </TableContainer>
-          </Grid>
+         
+          </Paper>
+          {/* Medical History Section */}
+  <Grid item xs={12} sm={6} lg={12} sx={{ marginTop: 2 }}>
+  
+    <Paper sx={{ padding: 0, backgroundColor: '#f8f9fa' }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%',marginBottom: 1 }}>
+  <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#343a40',marginLeft: 2  }}>
+    Medical History
+  </Typography>
+  
+  <IconButton
+  sx={{
+    backgroundColor: '#343a40',
+    color: 'white',
+    marginRight: 2,
+    fontSize: 20,
+    '&:hover': {
+      backgroundColor: '#343a40', // Keep the same background color on hover
+      color: 'white', // Keep the icon color the same on hover
+    }
+  }}
+  onClick={handleAddHistory}
+>
+  <AddIcon sx={{
+    fontSize: 18,
+  }}/>
+</IconButton>
+</Box>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650, color: '#343a40', backgroundColor: '#f8f9fa' }} aria-label="medical history table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Condition</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Treatment</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {/* Map through medical history entries */}
+            {medicalHistory.map((history, index) => (
+              <TableRow key={index}>
+                <TableCell>{history.date}</TableCell>
+                <TableCell>{history.condition}</TableCell>
+                <TableCell>{history.treatment}</TableCell>
+                <TableCell>{history.status}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
+  </Grid>
+        </Grid>
         </Grid>
       ) : (
         <Typography variant="h6" color="error" sx={{ textAlign: 'center' }}>

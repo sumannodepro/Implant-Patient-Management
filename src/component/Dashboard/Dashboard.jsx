@@ -20,7 +20,7 @@ import Tab from '@mui/material/Tab';
 import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import PersonIcon from '@mui/icons-material/Person';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { LocalHospital as LocalHospitalIcon } from '@mui/icons-material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -339,7 +339,7 @@ export default function Dashboard({ signOut }) {
             backgroundColor: '#6c757d',},}}>
           <Tab icon={<DashboardIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Dashboard" />
           <Tab icon={<PersonIcon />} iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Demography" />
-          <Tab icon={<HelpOutlineIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Chief Complaint" />
+          <Tab icon={<LocalHospitalIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Chief Complaint" />
           <Tab icon={<VisibilityIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Case Photos" />
           <Tab icon={<HealthAndSafetyIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="Treatment Suggested" />
           <Tab icon={<FolderOpenIcon />}iconPosition="start" sx={{'&.Mui-selected': {color: '#343a40',},}} label="IOS Viewer" />

@@ -1,8 +1,9 @@
   import React, { useState } from 'react';
   import { Typography, Box, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField } from '@mui/material';
   import { CSVLink } from 'react-csv';
-
+  import InvoicePage from './InvoicePage';
   export default function PaymentRecordsPage({ selectedPatient, selectedTreatments, paymentRecords }) {
+    
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
@@ -42,11 +43,8 @@
         {selectedPatient ? (
           <Grid container spacing={1}>
             <Grid item xs={12} sm={8}>
-              <Paper sx={{ padding: 2, backgroundColor: '#f8f9fa' }}>
-                <Typography variant="body1" color="textSecondary">
-                  Patient: {selectedPatient.patientName} ({selectedPatient.patientID})<br />
-                  Mobile: {selectedPatient.mobileNumber}
-                </Typography>
+              <Paper sx={{ padding: 1, backgroundColor: '#f8f9fa' }}>
+               <InvoicePage/>
               </Paper>
             </Grid>
             <Grid item xs={12} sm={4}>

@@ -33,6 +33,7 @@
     "react-router-dom": "^7.1.1",
     "react-split-pane": "^0.1.92",
     "react-time-picker": "^7.0.0",
+    "react-to-print": "^3.0.5",
     "three": "^0.172.0",
     "three-stdlib": "^2.35.12"
   },

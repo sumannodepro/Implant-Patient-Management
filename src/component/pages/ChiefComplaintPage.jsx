@@ -158,8 +158,6 @@ const handleRemoveFile = (fileName) => {
     <Box sx={{ padding: 1 }}>
       {selectedPatient ? (
         <>
-          
-  
           <Grid container spacing={1}>
             {/* Left Segment - Displays either Text Mode or Upload Mode */}
             <Grid item xs={12} md={3} >
@@ -172,11 +170,18 @@ const handleRemoveFile = (fileName) => {
               size="small" // Reduce the size of the ToggleButtonGroup
               sx={{
                 marginTop: '-8px',
-              '& .MuiToggleButton-root': {
-              fontSize: '0.75rem', // Smaller font size
-              padding: '4px 8px', // Reduce padding
-              minWidth: '70px', // Reduce button width
-              },
+                '& .MuiToggleButton-root': {
+                  fontSize: '0.75rem', // Smaller font size
+                  padding: '4px 8px', // Reduce padding
+                  minWidth: '70px', // Reduce button width
+                  backgroundColor: '#343a40', // Background color
+                  color: '#f8f9fa', // Text color
+                  
+                  '&.Mui-selected': {
+                    backgroundColor: '#7f8c8d', // Darker color when selected
+                    color: '#f8f9fa', // Ensure text remains visible
+                  },
+                },
               }}>
               <ToggleButton value="text" aria-label="Text Mode">
                 Text Mode

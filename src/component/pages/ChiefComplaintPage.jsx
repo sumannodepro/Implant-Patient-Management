@@ -176,10 +176,17 @@ const handleRemoveFile = (fileName) => {
                   minWidth: '70px', // Reduce button width
                   backgroundColor: '#343a40', // Background color
                   color: '#f8f9fa', // Text color
-                  
+                  transition: 'background-color 0.3s ease', // Smooth transition effect
+
+                  '&:hover': {
+                  backgroundColor: '#495057', // Slightly lighter color on hover
+                  },  
                   '&.Mui-selected': {
                     backgroundColor: '#7f8c8d', // Darker color when selected
                     color: '#f8f9fa', // Ensure text remains visible
+                    '&:hover': {
+                      backgroundColor: '#5f6a6a', // Darker hover effect for selected state
+                    },
                   },
                 },
               }}>

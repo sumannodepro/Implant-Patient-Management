@@ -13,7 +13,7 @@ export default function PrePostPage({ selectedPatient }) {
           {selectedPatient ? (
             <Typography>Pre content goes here...</Typography>
           ) : (
-            <Typography variant="body1" color="textSecondary">
+            <Typography variant="h6" color="error" sx={{ textAlign: 'center' }}>
               Please select a patient to view pre.
             </Typography>
           )}

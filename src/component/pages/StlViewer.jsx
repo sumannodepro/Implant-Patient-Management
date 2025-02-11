@@ -1,39 +1,88 @@
-import React, { useRef, useState } from 'react';
-import * as THREE from 'three'; // For general THREE.js imports
-import { STLLoader } from 'three-stdlib'; // Correct import for STLLoader
+import React, { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { Box,Button,Typography } from '@mui/material';
-
-let scene, camera, renderer, controls;
+import { Box, Button, Typography } from '@mui/material';
 
 const StlViewer = () => {
   const stlContainerRef = useRef(null);
-  const [stlModel, setStlModel] = useState(null);
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const [lastMousePosition, setLastMousePosition] = useState(null);
+  const sceneRef = useRef(null);
+  const cameraRef = useRef(null);
+  const rendererRef = useRef(null);
+  const controlsRef = useRef(null);
   const [showPlaceholder, setShowPlaceholder] = useState(true);
 
+  useEffect(() => {
+    if (!stlContainerRef.current) return;
 
-  const handleInteractionStart = () => {
-    setShowPlaceholder(false); // Hide the placeholder when interaction starts
-  };
+    // Initialize Scene
+    sceneRef.current = new THREE.Scene();
+
+    // Camera Setup
+    const aspectRatio = stlContainerRef.current.clientWidth / stlContainerRef.current.clientHeight;
+    cameraRef.current = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
+    cameraRef.current.position.set(0, 0, 3);
+
+    // Renderer Setup
+    rendererRef.current = new THREE.WebGLRenderer({ antialias: true });
+    rendererRef.current.setSize(stlContainerRef.current.clientWidth, stlContainerRef.current.clientHeight);
+    rendererRef.current.setPixelRatio(window.devicePixelRatio);
+    rendererRef.current.outputEncoding = THREE.LinearSRGBColorSpace;
+    rendererRef.current.toneMapping = THREE.ACESFilmicToneMapping;
+    rendererRef.current.toneMappingExposure = 1.0;
+    stlContainerRef.current.appendChild(rendererRef.current.domElement);
+
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 5, 5);
+    sceneRef.current.add(ambientLight, directionalLight);
+
+    // Controls
+    controlsRef.current = new OrbitControls(cameraRef.current, rendererRef.current.domElement);
+    controlsRef.current.enableDamping = true;
+    controlsRef.current.dampingFactor = 0.1;
+
+    const animate = () => {
+      requestAnimationFrame(animate);
+      controlsRef.current.update();
+      rendererRef.current.render(sceneRef.current, cameraRef.current);
+    };
+    animate();
+
+    // Handle Resize
+    const handleResize = () => {
+      if (stlContainerRef.current && cameraRef.current && rendererRef.current) {
+        const width = stlContainerRef.current.clientWidth;
+        const height = stlContainerRef.current.clientHeight;
+        cameraRef.current.aspect = width / height;
+        cameraRef.current.updateProjectionMatrix();
+        rendererRef.current.setSize(width, height);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      rendererRef.current.dispose();
+    };
+  }, []);
 
   const loadSTLModel = (file) => {
     setShowPlaceholder(false);
+
     const reader = new FileReader();
     reader.onload = (event) => {
-      const buffer = event.target?.result;
+      const buffer = event.target.result;
 
-      if (buffer.byteLength === 0) {
-        console.error('Empty STL file');
+      if (!buffer || buffer.byteLength === 0) {
+        console.error('Invalid STL file');
         return;
       }
 
       const loader = new STLLoader();
       const geometry = loader.parse(buffer);
-
       geometry.computeVertexNormals();
-      geometry.computeBoundingSphere();
 
       const material = new THREE.MeshPhysicalMaterial({
         color: 0xcccccc,
@@ -48,128 +97,58 @@ const StlViewer = () => {
       mesh.rotation.x = Math.PI / 2;
       mesh.scale.set(0.2, 0.2, 0.2);
 
-      if (!scene) {
-        scene = new THREE.Scene();
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(5, 5, 5);
-
-        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
-        directionalLight2.position.set(-5, -5, -5);
-
-        scene.add(ambientLight, directionalLight, directionalLight2);
-      }
-
-      scene.add(mesh);
-
-      if (!camera) {
-        camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-        camera.position.z = 2;
-      }
-
-      if (!renderer) {
-        renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(stlContainerRef.current?.clientWidth || 0, stlContainerRef.current?.clientHeight || 0);
-        renderer.outputEncoding = THREE.LinearSRGBColorSpace;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.0;
-
-        stlContainerRef.current?.appendChild(renderer.domElement);
-      }
-
-      if (!controls) {
-        controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.1;
-      }
-
-      const animate = () => {
-        requestAnimationFrame(animate);
-        controls.update();
-        renderer.render(scene, camera);
-      };
-      animate();
-
-      setStlModel(mesh);
+      // Remove previous models before adding a new one
+      sceneRef.current.children = sceneRef.current.children.filter((child) => !(child instanceof THREE.Mesh));
+      sceneRef.current.add(mesh);
     };
 
     reader.readAsArrayBuffer(file);
   };
 
-  const handleMouseDown = (event) => {
-    setIsMouseDown(true);
-    setLastMousePosition({ x: event.clientX, y: event.clientY });
-  };
-
-  const handleMouseMove = (event) => {
-    if (!isMouseDown || !stlModel) return;
-
-    const deltaX = event.clientX - (lastMousePosition?.x || 0);
-    const deltaY = event.clientY - (lastMousePosition?.y || 0);
-
-    stlModel.rotation.y += deltaX * 0.01;
-    stlModel.rotation.x += deltaY * 0.01;
-
-    setLastMousePosition({ x: event.clientX, y: event.clientY });
-  };
-
-  const handleMouseUp = () => {
-    setIsMouseDown(false);
-  };
-
   return (
-    <Box 
-  sx={{ 
-    display: 'flex', 
-    flexDirection: 'column', 
-    alignItems: 'center', 
-    gap: 1, 
-    padding: 1, 
-    backgroundColor: '#f1f3f5', 
-    borderRadius: 2, 
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' 
-  }}
->
-  {/* File Upload Button */}
-  <Button
-    variant="contained"
-    component="label"
-    sx={{
-      backgroundColor: '#343a40',
-      color: '#fff',
-      '&:hover': {
-        backgroundColor: '#5a6268',
-      },
-      textTransform: 'none',
-    }}
-  >
-    Upload STL File
-    <input
-      type="file"
-      accept=".stl"
-      hidden
-      onChange={(e) => e.target.files && loadSTLModel(e.target.files[0])}
-    />
-  </Button>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 1,
+        padding: 1,
+        backgroundColor: '#f1f3f5',
+        borderRadius: 2,
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      }}
+    >
+      {/* File Upload Button */}
+      <Button
+        variant="contained"
+        component="label"
+        sx={{
+          backgroundColor: '#343a40',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#5a6268',
+          },
+          textTransform: 'none',
+        }}
+      >
+        Upload STL File
+        <input type="file" accept=".stl" hidden onChange={(e) => e.target.files && loadSTLModel(e.target.files[0])} />
+      </Button>
 
-  {/* STL Container */}
-  <Box
-    ref={stlContainerRef}
-    sx={{
-      width: '100%',
-      height: '90vh',
-      border: '2px dashed #6c757d',
-      backgroundColor: '#e0e0e0',
-      borderRadius: 2,
-      overflow: 'hidden',
-      position: 'relative',
-    }}
-    onMouseDown={handleMouseDown}
-    onMouseMove={handleMouseMove}
-    onMouseUp={handleMouseUp}
-    
-  >
-    {showPlaceholder && (
+      {/* STL Viewer */}
+      <Box
+        ref={stlContainerRef}
+        sx={{
+          width: '100%',
+          height: '90vh',
+          border: '2px dashed #6c757d',
+          backgroundColor: '#e0e0e0',
+          borderRadius: 2,
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+      >
+        {showPlaceholder && (
           <Typography
             variant="subtitle1"
             sx={{
@@ -184,9 +163,8 @@ const StlViewer = () => {
             Drag and interact with the STL model here
           </Typography>
         )}
-  </Box>
-</Box>
-
+      </Box>
+    </Box>
   );
 };
 

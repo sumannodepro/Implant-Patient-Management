@@ -17,9 +17,6 @@
       },
       "hosting": {
         "S3AndCloudFront": {}
-      },
-      "api": {
-        "implantpatientmanage": {}
       }
     }
   }

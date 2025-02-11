@@ -3,8 +3,7 @@ import { Typography, Box, IconButton, Modal, Paper } from '@mui/material';
 import { Fullscreen, Close } from '@mui/icons-material';
 import SplitPane from 'react-split-pane';
 import './splitpane.css'; // Import custom styles
-import STLViewer from './STLViewer'; // Import STLViewer component
-import DICOMViewer from './DICOMViewer'; // Import DICOMViewer component
+
 
 export default function IOSViewerPage({ selectedPatient }) {
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -51,7 +50,7 @@ export default function IOSViewerPage({ selectedPatient }) {
             >
               {isFullScreen && activePane === 'dicom' ? <Close /> : <Fullscreen />}
             </IconButton>
-            <DICOMViewer />
+            
           </Box>
 
           {/* STL Viewer Pane */}
@@ -79,7 +78,7 @@ export default function IOSViewerPage({ selectedPatient }) {
             >
               {isFullScreen && activePane === 'stl' ? <Close /> : <Fullscreen />}
             </IconButton>
-            <STLViewer />
+            
           </Box>
         </SplitPane>
       ) : (

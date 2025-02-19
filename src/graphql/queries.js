@@ -9,8 +9,12 @@ export const getPatient = /* GraphQL */ `
       title
       patientName
       mobileNumber
+      landlineNumber
+      city
       emailId
       address
+      address2
+      religion
       dateOfBirth
       age
       bloodGroup
@@ -34,8 +38,12 @@ export const listPatients = /* GraphQL */ `
         title
         patientName
         mobileNumber
+        landlineNumber
+        city
         emailId
         address
+        address2
+        religion
         dateOfBirth
         age
         bloodGroup

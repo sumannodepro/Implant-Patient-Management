@@ -9,8 +9,12 @@ type Patient @model @auth(rules: [{ allow: public }]) {
   title: String
   patientName: String!
   mobileNumber: String!
+  landlineNumber: String
+  city: String
   emailId: String
   address: String
+  address2: String
+  religion: String
   dateOfBirth: AWSDate
   age: Int
   bloodGroup: String

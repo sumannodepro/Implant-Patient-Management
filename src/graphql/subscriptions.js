@@ -9,8 +9,12 @@ export const onCreatePatient = /* GraphQL */ `
       title
       patientName
       mobileNumber
+      landlineNumber
+      city
       emailId
       address
+      address2
+      religion
       dateOfBirth
       age
       bloodGroup
@@ -29,8 +33,12 @@ export const onUpdatePatient = /* GraphQL */ `
       title
       patientName
       mobileNumber
+      landlineNumber
+      city
       emailId
       address
+      address2
+      religion
       dateOfBirth
       age
       bloodGroup
@@ -49,8 +57,12 @@ export const onDeletePatient = /* GraphQL */ `
       title
       patientName
       mobileNumber
+      landlineNumber
+      city
       emailId
       address
+      address2
+      religion
       dateOfBirth
       age
       bloodGroup

@@ -26,8 +26,12 @@ export declare type PatientUpdateFormInputValues = {
     title?: string;
     patientName?: string;
     mobileNumber?: string;
+    landlineNumber?: string;
+    city?: string;
     emailId?: string;
     address?: string;
+    address2?: string;
+    religion?: string;
     dateOfBirth?: string;
     age?: number;
     bloodGroup?: string;
@@ -40,8 +44,12 @@ export declare type PatientUpdateFormValidationValues = {
     title?: ValidationFunction<string>;
     patientName?: ValidationFunction<string>;
     mobileNumber?: ValidationFunction<string>;
+    landlineNumber?: ValidationFunction<string>;
+    city?: ValidationFunction<string>;
     emailId?: ValidationFunction<string>;
     address?: ValidationFunction<string>;
+    address2?: ValidationFunction<string>;
+    religion?: ValidationFunction<string>;
     dateOfBirth?: ValidationFunction<string>;
     age?: ValidationFunction<number>;
     bloodGroup?: ValidationFunction<string>;
@@ -56,8 +64,12 @@ export declare type PatientUpdateFormOverridesProps = {
     title?: PrimitiveOverrideProps<TextFieldProps>;
     patientName?: PrimitiveOverrideProps<TextFieldProps>;
     mobileNumber?: PrimitiveOverrideProps<TextFieldProps>;
+    landlineNumber?: PrimitiveOverrideProps<TextFieldProps>;
+    city?: PrimitiveOverrideProps<TextFieldProps>;
     emailId?: PrimitiveOverrideProps<TextFieldProps>;
     address?: PrimitiveOverrideProps<TextFieldProps>;
+    address2?: PrimitiveOverrideProps<TextFieldProps>;
+    religion?: PrimitiveOverrideProps<TextFieldProps>;
     dateOfBirth?: PrimitiveOverrideProps<TextFieldProps>;
     age?: PrimitiveOverrideProps<TextFieldProps>;
     bloodGroup?: PrimitiveOverrideProps<TextFieldProps>;

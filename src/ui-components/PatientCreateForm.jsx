@@ -26,8 +26,12 @@ export default function PatientCreateForm(props) {
     title: "",
     patientName: "",
     mobileNumber: "",
+    landlineNumber: "",
+    city: "",
     emailId: "",
     address: "",
+    address2: "",
+    religion: "",
     dateOfBirth: "",
     age: "",
     bloodGroup: "",
@@ -43,8 +47,14 @@ export default function PatientCreateForm(props) {
   const [mobileNumber, setMobileNumber] = React.useState(
     initialValues.mobileNumber
   );
+  const [landlineNumber, setLandlineNumber] = React.useState(
+    initialValues.landlineNumber
+  );
+  const [city, setCity] = React.useState(initialValues.city);
   const [emailId, setEmailId] = React.useState(initialValues.emailId);
   const [address, setAddress] = React.useState(initialValues.address);
+  const [address2, setAddress2] = React.useState(initialValues.address2);
+  const [religion, setReligion] = React.useState(initialValues.religion);
   const [dateOfBirth, setDateOfBirth] = React.useState(
     initialValues.dateOfBirth
   );
@@ -59,8 +69,12 @@ export default function PatientCreateForm(props) {
     setTitle(initialValues.title);
     setPatientName(initialValues.patientName);
     setMobileNumber(initialValues.mobileNumber);
+    setLandlineNumber(initialValues.landlineNumber);
+    setCity(initialValues.city);
     setEmailId(initialValues.emailId);
     setAddress(initialValues.address);
+    setAddress2(initialValues.address2);
+    setReligion(initialValues.religion);
     setDateOfBirth(initialValues.dateOfBirth);
     setAge(initialValues.age);
     setBloodGroup(initialValues.bloodGroup);
@@ -74,8 +88,12 @@ export default function PatientCreateForm(props) {
     title: [],
     patientName: [{ type: "Required" }],
     mobileNumber: [{ type: "Required" }],
+    landlineNumber: [],
+    city: [],
     emailId: [],
     address: [],
+    address2: [],
+    religion: [],
     dateOfBirth: [],
     age: [],
     bloodGroup: [],
@@ -130,8 +148,12 @@ export default function PatientCreateForm(props) {
           title,
           patientName,
           mobileNumber,
+          landlineNumber,
+          city,
           emailId,
           address,
+          address2,
+          religion,
           dateOfBirth,
           age,
           bloodGroup,
@@ -204,8 +226,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId,
               address,
+              address2,
+              religion,
               dateOfBirth,
               age,
               bloodGroup,
@@ -239,8 +265,12 @@ export default function PatientCreateForm(props) {
               title: value,
               patientName,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId,
               address,
+              address2,
+              religion,
               dateOfBirth,
               age,
               bloodGroup,
@@ -274,8 +304,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName: value,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId,
               address,
+              address2,
+              religion,
               dateOfBirth,
               age,
               bloodGroup,
@@ -309,8 +343,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName,
               mobileNumber: value,
+              landlineNumber,
+              city,
               emailId,
               address,
+              address2,
+              religion,
               dateOfBirth,
               age,
               bloodGroup,
@@ -332,6 +370,84 @@ export default function PatientCreateForm(props) {
         {...getOverrideProps(overrides, "mobileNumber")}
       ></TextField>
       <TextField
+        label="Landline number"
+        isRequired={false}
+        isReadOnly={false}
+        value={landlineNumber}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              patientID,
+              title,
+              patientName,
+              mobileNumber,
+              landlineNumber: value,
+              city,
+              emailId,
+              address,
+              address2,
+              religion,
+              dateOfBirth,
+              age,
+              bloodGroup,
+              gender,
+              createdAt,
+              updatedAt,
+            };
+            const result = onChange(modelFields);
+            value = result?.landlineNumber ?? value;
+          }
+          if (errors.landlineNumber?.hasError) {
+            runValidationTasks("landlineNumber", value);
+          }
+          setLandlineNumber(value);
+        }}
+        onBlur={() => runValidationTasks("landlineNumber", landlineNumber)}
+        errorMessage={errors.landlineNumber?.errorMessage}
+        hasError={errors.landlineNumber?.hasError}
+        {...getOverrideProps(overrides, "landlineNumber")}
+      ></TextField>
+      <TextField
+        label="City"
+        isRequired={false}
+        isReadOnly={false}
+        value={city}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              patientID,
+              title,
+              patientName,
+              mobileNumber,
+              landlineNumber,
+              city: value,
+              emailId,
+              address,
+              address2,
+              religion,
+              dateOfBirth,
+              age,
+              bloodGroup,
+              gender,
+              createdAt,
+              updatedAt,
+            };
+            const result = onChange(modelFields);
+            value = result?.city ?? value;
+          }
+          if (errors.city?.hasError) {
+            runValidationTasks("city", value);
+          }
+          setCity(value);
+        }}
+        onBlur={() => runValidationTasks("city", city)}
+        errorMessage={errors.city?.errorMessage}
+        hasError={errors.city?.hasError}
+        {...getOverrideProps(overrides, "city")}
+      ></TextField>
+      <TextField
         label="Email id"
         isRequired={false}
         isReadOnly={false}
@@ -344,8 +460,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId: value,
               address,
+              address2,
+              religion,
               dateOfBirth,
               age,
               bloodGroup,
@@ -379,8 +499,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId,
               address: value,
+              address2,
+              religion,
               dateOfBirth,
               age,
               bloodGroup,
@@ -402,6 +526,84 @@ export default function PatientCreateForm(props) {
         {...getOverrideProps(overrides, "address")}
       ></TextField>
       <TextField
+        label="Address2"
+        isRequired={false}
+        isReadOnly={false}
+        value={address2}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              patientID,
+              title,
+              patientName,
+              mobileNumber,
+              landlineNumber,
+              city,
+              emailId,
+              address,
+              address2: value,
+              religion,
+              dateOfBirth,
+              age,
+              bloodGroup,
+              gender,
+              createdAt,
+              updatedAt,
+            };
+            const result = onChange(modelFields);
+            value = result?.address2 ?? value;
+          }
+          if (errors.address2?.hasError) {
+            runValidationTasks("address2", value);
+          }
+          setAddress2(value);
+        }}
+        onBlur={() => runValidationTasks("address2", address2)}
+        errorMessage={errors.address2?.errorMessage}
+        hasError={errors.address2?.hasError}
+        {...getOverrideProps(overrides, "address2")}
+      ></TextField>
+      <TextField
+        label="Religion"
+        isRequired={false}
+        isReadOnly={false}
+        value={religion}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              patientID,
+              title,
+              patientName,
+              mobileNumber,
+              landlineNumber,
+              city,
+              emailId,
+              address,
+              address2,
+              religion: value,
+              dateOfBirth,
+              age,
+              bloodGroup,
+              gender,
+              createdAt,
+              updatedAt,
+            };
+            const result = onChange(modelFields);
+            value = result?.religion ?? value;
+          }
+          if (errors.religion?.hasError) {
+            runValidationTasks("religion", value);
+          }
+          setReligion(value);
+        }}
+        onBlur={() => runValidationTasks("religion", religion)}
+        errorMessage={errors.religion?.errorMessage}
+        hasError={errors.religion?.hasError}
+        {...getOverrideProps(overrides, "religion")}
+      ></TextField>
+      <TextField
         label="Date of birth"
         isRequired={false}
         isReadOnly={false}
@@ -415,8 +617,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId,
               address,
+              address2,
+              religion,
               dateOfBirth: value,
               age,
               bloodGroup,
@@ -454,8 +660,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId,
               address,
+              address2,
+              religion,
               dateOfBirth,
               age: value,
               bloodGroup,
@@ -489,8 +699,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId,
               address,
+              address2,
+              religion,
               dateOfBirth,
               age,
               bloodGroup: value,
@@ -524,8 +738,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId,
               address,
+              address2,
+              religion,
               dateOfBirth,
               age,
               bloodGroup,
@@ -561,8 +779,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId,
               address,
+              address2,
+              religion,
               dateOfBirth,
               age,
               bloodGroup,
@@ -598,8 +820,12 @@ export default function PatientCreateForm(props) {
               title,
               patientName,
               mobileNumber,
+              landlineNumber,
+              city,
               emailId,
               address,
+              address2,
+              religion,
               dateOfBirth,
               age,
               bloodGroup,

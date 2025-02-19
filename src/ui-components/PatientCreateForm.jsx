@@ -32,6 +32,8 @@ export default function PatientCreateForm(props) {
     age: "",
     bloodGroup: "",
     gender: "",
+    createdAt: "",
+    updatedAt: "",
   };
   const [patientID, setPatientID] = React.useState(initialValues.patientID);
   const [title, setTitle] = React.useState(initialValues.title);
@@ -49,6 +51,8 @@ export default function PatientCreateForm(props) {
   const [age, setAge] = React.useState(initialValues.age);
   const [bloodGroup, setBloodGroup] = React.useState(initialValues.bloodGroup);
   const [gender, setGender] = React.useState(initialValues.gender);
+  const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
+  const [updatedAt, setUpdatedAt] = React.useState(initialValues.updatedAt);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setPatientID(initialValues.patientID);
@@ -61,19 +65,23 @@ export default function PatientCreateForm(props) {
     setAge(initialValues.age);
     setBloodGroup(initialValues.bloodGroup);
     setGender(initialValues.gender);
+    setCreatedAt(initialValues.createdAt);
+    setUpdatedAt(initialValues.updatedAt);
     setErrors({});
   };
   const validations = {
     patientID: [{ type: "Required" }],
     title: [],
     patientName: [{ type: "Required" }],
-    mobileNumber: [],
+    mobileNumber: [{ type: "Required" }],
     emailId: [],
     address: [],
     dateOfBirth: [],
     age: [],
     bloodGroup: [],
     gender: [],
+    createdAt: [],
+    updatedAt: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -91,6 +99,23 @@ export default function PatientCreateForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat("default", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      calendar: "iso8601",
+      numberingSystem: "latn",
+      hourCycle: "h23",
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
   };
   return (
     <Grid
@@ -111,6 +136,8 @@ export default function PatientCreateForm(props) {
           age,
           bloodGroup,
           gender,
+          createdAt,
+          updatedAt,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -183,6 +210,8 @@ export default function PatientCreateForm(props) {
               age,
               bloodGroup,
               gender,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.patientID ?? value;
@@ -216,6 +245,8 @@ export default function PatientCreateForm(props) {
               age,
               bloodGroup,
               gender,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.title ?? value;
@@ -249,6 +280,8 @@ export default function PatientCreateForm(props) {
               age,
               bloodGroup,
               gender,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.patientName ?? value;
@@ -265,7 +298,7 @@ export default function PatientCreateForm(props) {
       ></TextField>
       <TextField
         label="Mobile number"
-        isRequired={false}
+        isRequired={true}
         isReadOnly={false}
         value={mobileNumber}
         onChange={(e) => {
@@ -282,6 +315,8 @@ export default function PatientCreateForm(props) {
               age,
               bloodGroup,
               gender,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.mobileNumber ?? value;
@@ -315,6 +350,8 @@ export default function PatientCreateForm(props) {
               age,
               bloodGroup,
               gender,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.emailId ?? value;
@@ -348,6 +385,8 @@ export default function PatientCreateForm(props) {
               age,
               bloodGroup,
               gender,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -382,6 +421,8 @@ export default function PatientCreateForm(props) {
               age,
               bloodGroup,
               gender,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.dateOfBirth ?? value;
@@ -419,6 +460,8 @@ export default function PatientCreateForm(props) {
               age: value,
               bloodGroup,
               gender,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.age ?? value;
@@ -452,6 +495,8 @@ export default function PatientCreateForm(props) {
               age,
               bloodGroup: value,
               gender,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.bloodGroup ?? value;
@@ -485,6 +530,8 @@ export default function PatientCreateForm(props) {
               age,
               bloodGroup,
               gender: value,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.gender ?? value;
@@ -498,6 +545,80 @@ export default function PatientCreateForm(props) {
         errorMessage={errors.gender?.errorMessage}
         hasError={errors.gender?.hasError}
         {...getOverrideProps(overrides, "gender")}
+      ></TextField>
+      <TextField
+        label="Created at"
+        isRequired={false}
+        isReadOnly={false}
+        type="datetime-local"
+        value={createdAt && convertToLocal(new Date(createdAt))}
+        onChange={(e) => {
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
+          if (onChange) {
+            const modelFields = {
+              patientID,
+              title,
+              patientName,
+              mobileNumber,
+              emailId,
+              address,
+              dateOfBirth,
+              age,
+              bloodGroup,
+              gender,
+              createdAt: value,
+              updatedAt,
+            };
+            const result = onChange(modelFields);
+            value = result?.createdAt ?? value;
+          }
+          if (errors.createdAt?.hasError) {
+            runValidationTasks("createdAt", value);
+          }
+          setCreatedAt(value);
+        }}
+        onBlur={() => runValidationTasks("createdAt", createdAt)}
+        errorMessage={errors.createdAt?.errorMessage}
+        hasError={errors.createdAt?.hasError}
+        {...getOverrideProps(overrides, "createdAt")}
+      ></TextField>
+      <TextField
+        label="Updated at"
+        isRequired={false}
+        isReadOnly={false}
+        type="datetime-local"
+        value={updatedAt && convertToLocal(new Date(updatedAt))}
+        onChange={(e) => {
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
+          if (onChange) {
+            const modelFields = {
+              patientID,
+              title,
+              patientName,
+              mobileNumber,
+              emailId,
+              address,
+              dateOfBirth,
+              age,
+              bloodGroup,
+              gender,
+              createdAt,
+              updatedAt: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.updatedAt ?? value;
+          }
+          if (errors.updatedAt?.hasError) {
+            runValidationTasks("updatedAt", value);
+          }
+          setUpdatedAt(value);
+        }}
+        onBlur={() => runValidationTasks("updatedAt", updatedAt)}
+        errorMessage={errors.updatedAt?.errorMessage}
+        hasError={errors.updatedAt?.hasError}
+        {...getOverrideProps(overrides, "updatedAt")}
       ></TextField>
       <Flex
         justifyContent="space-between"

@@ -81,18 +81,9 @@ export const onCreateTreatment = /* GraphQL */ `
     onCreateTreatment(filter: $filter, owner: $owner) {
       id
       treatmentName
-      description
       price
-      duration
       createdAt
       updatedAt
-      doctorID
-      isActive
-      category
-      discount
-      insuranceCovered
-      notes
-      imageUrl
       owner
       __typename
     }
@@ -106,18 +97,9 @@ export const onUpdateTreatment = /* GraphQL */ `
     onUpdateTreatment(filter: $filter, owner: $owner) {
       id
       treatmentName
-      description
       price
-      duration
       createdAt
       updatedAt
-      doctorID
-      isActive
-      category
-      discount
-      insuranceCovered
-      notes
-      imageUrl
       owner
       __typename
     }
@@ -131,18 +113,9 @@ export const onDeleteTreatment = /* GraphQL */ `
     onDeleteTreatment(filter: $filter, owner: $owner) {
       id
       treatmentName
-      description
       price
-      duration
       createdAt
       updatedAt
-      doctorID
-      isActive
-      category
-      discount
-      insuranceCovered
-      notes
-      imageUrl
       owner
       __typename
     }

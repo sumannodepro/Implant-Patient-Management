@@ -56,18 +56,9 @@ export const getTreatment = /* GraphQL */ `
     getTreatment(id: $id) {
       id
       treatmentName
-      description
       price
-      duration
       createdAt
       updatedAt
-      doctorID
-      isActive
-      category
-      discount
-      insuranceCovered
-      notes
-      imageUrl
       owner
       __typename
     }
@@ -83,18 +74,9 @@ export const listTreatments = /* GraphQL */ `
       items {
         id
         treatmentName
-        description
         price
-        duration
         createdAt
         updatedAt
-        doctorID
-        isActive
-        category
-        discount
-        insuranceCovered
-        notes
-        imageUrl
         owner
         __typename
       }

@@ -81,18 +81,9 @@ export const createTreatment = /* GraphQL */ `
     createTreatment(input: $input, condition: $condition) {
       id
       treatmentName
-      description
       price
-      duration
       createdAt
       updatedAt
-      doctorID
-      isActive
-      category
-      discount
-      insuranceCovered
-      notes
-      imageUrl
       owner
       __typename
     }
@@ -106,18 +97,9 @@ export const updateTreatment = /* GraphQL */ `
     updateTreatment(input: $input, condition: $condition) {
       id
       treatmentName
-      description
       price
-      duration
       createdAt
       updatedAt
-      doctorID
-      isActive
-      category
-      discount
-      insuranceCovered
-      notes
-      imageUrl
       owner
       __typename
     }
@@ -131,18 +113,9 @@ export const deleteTreatment = /* GraphQL */ `
     deleteTreatment(input: $input, condition: $condition) {
       id
       treatmentName
-      description
       price
-      duration
       createdAt
       updatedAt
-      doctorID
-      isActive
-      category
-      discount
-      insuranceCovered
-      notes
-      imageUrl
       owner
       __typename
     }

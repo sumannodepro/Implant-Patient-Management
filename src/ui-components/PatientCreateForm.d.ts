@@ -32,6 +32,8 @@ export declare type PatientCreateFormInputValues = {
     age?: number;
     bloodGroup?: string;
     gender?: string;
+    createdAt?: string;
+    updatedAt?: string;
 };
 export declare type PatientCreateFormValidationValues = {
     patientID?: ValidationFunction<string>;
@@ -44,6 +46,8 @@ export declare type PatientCreateFormValidationValues = {
     age?: ValidationFunction<number>;
     bloodGroup?: ValidationFunction<string>;
     gender?: ValidationFunction<string>;
+    createdAt?: ValidationFunction<string>;
+    updatedAt?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PatientCreateFormOverridesProps = {
@@ -58,6 +62,8 @@ export declare type PatientCreateFormOverridesProps = {
     age?: PrimitiveOverrideProps<TextFieldProps>;
     bloodGroup?: PrimitiveOverrideProps<TextFieldProps>;
     gender?: PrimitiveOverrideProps<TextFieldProps>;
+    createdAt?: PrimitiveOverrideProps<TextFieldProps>;
+    updatedAt?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type PatientCreateFormProps = React.PropsWithChildren<{
     overrides?: PatientCreateFormOverridesProps | undefined | null;

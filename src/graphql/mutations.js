@@ -20,7 +20,6 @@ export const createPatient = /* GraphQL */ `
       gender
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
@@ -44,7 +43,6 @@ export const updatePatient = /* GraphQL */ `
       gender
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
@@ -68,7 +66,6 @@ export const deletePatient = /* GraphQL */ `
       gender
       createdAt
       updatedAt
-      owner
       __typename
     }
   }

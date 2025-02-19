@@ -2,11 +2,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreatePatient = /* GraphQL */ `
-  subscription OnCreatePatient(
-    $filter: ModelSubscriptionPatientFilterInput
-    $owner: String
-  ) {
-    onCreatePatient(filter: $filter, owner: $owner) {
+  subscription OnCreatePatient($filter: ModelSubscriptionPatientFilterInput) {
+    onCreatePatient(filter: $filter) {
       id
       patientID
       title
@@ -20,17 +17,13 @@ export const onCreatePatient = /* GraphQL */ `
       gender
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
 `;
 export const onUpdatePatient = /* GraphQL */ `
-  subscription OnUpdatePatient(
-    $filter: ModelSubscriptionPatientFilterInput
-    $owner: String
-  ) {
-    onUpdatePatient(filter: $filter, owner: $owner) {
+  subscription OnUpdatePatient($filter: ModelSubscriptionPatientFilterInput) {
+    onUpdatePatient(filter: $filter) {
       id
       patientID
       title
@@ -44,17 +37,13 @@ export const onUpdatePatient = /* GraphQL */ `
       gender
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
 `;
 export const onDeletePatient = /* GraphQL */ `
-  subscription OnDeletePatient(
-    $filter: ModelSubscriptionPatientFilterInput
-    $owner: String
-  ) {
-    onDeletePatient(filter: $filter, owner: $owner) {
+  subscription OnDeletePatient($filter: ModelSubscriptionPatientFilterInput) {
+    onDeletePatient(filter: $filter) {
       id
       patientID
       title
@@ -68,7 +57,6 @@ export const onDeletePatient = /* GraphQL */ `
       gender
       createdAt
       updatedAt
-      owner
       __typename
     }
   }

@@ -5,6 +5,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { listPatients } from '../graphql/queries';
 import { createPatient } from '../graphql/mutations';
 import { Auth } from 'aws-amplify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function AddPatientModal({ open, handleClose }) {
@@ -114,8 +116,11 @@ export default function AddPatientModal({ open, handleClose }) {
         alert(`Error: ${createResponse.errors[0].message}`);
         return;
       }
-      handleClose();
-      resetFormData();
+      if (createResponse.data) {
+        toast.success('Patient added successfully!', { position: "top-right" });
+        handleClose();
+        resetFormData();
+      }
     } catch (error) {
       console.error('Error creating patient:', error);
       alert('An error occurred while submitting patient data.');
@@ -135,6 +140,7 @@ export default function AddPatientModal({ open, handleClose }) {
   };
 
   return (
+    <>
     <Modal
       open={open}
       onClose={handleClose}
@@ -513,5 +519,7 @@ export default function AddPatientModal({ open, handleClose }) {
       </Box>
     </Box>
     </Modal>
+    <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 }

@@ -3,7 +3,7 @@
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
 # Define a patient model
-type Patient @model @auth(rules: [{ allow: owner }]) {
+type Patient @model @auth(rules: [{ allow: public }]) {
   id: ID!
   patientID: String!
   title: String

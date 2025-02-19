@@ -17,7 +17,6 @@ export const getPatient = /* GraphQL */ `
       gender
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
@@ -43,7 +42,6 @@ export const listPatients = /* GraphQL */ `
         gender
         createdAt
         updatedAt
-        owner
         __typename
       }
       nextToken

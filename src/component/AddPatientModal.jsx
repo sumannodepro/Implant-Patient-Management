@@ -77,17 +77,35 @@ export default function AddPatientModal({ open, handleClose }) {
     try {
       const { patientName, title, mobileNumber, emailId, address, dateOfBirth, age, bloodGroup, gender } = formData;
   
-      if (!patientName || !title || !mobileNumber || !emailId || !address || !dateOfBirth || !age || !bloodGroup || !gender) {
-        alert('Please fill in all required fields.');
+      // Trim values before validation
+      if (
+        !patientName.trim() || !title.trim() || !mobileNumber.trim() ||
+        !emailId.trim() || !address.trim() || !dateOfBirth.trim() ||
+        !age.trim() || !bloodGroup.trim() || !gender.trim()
+      ) {
+        toast.error('Please fill in all required fields.', { position: "top-right" });
         return;
       }
-      const formattedDateOfBirth = dateOfBirth.split('/').reverse().join('-');
   
-      const patientID = generatePatientID(patientName); // Function to generate patientID
+      // Format Date of Birth properly
+      const formattedDateOfBirth = dateOfBirth.includes('/') 
+        ? dateOfBirth.split('/').reverse().join('-') 
+        : dateOfBirth; 
   
-      const authToken = await Auth.currentSession().then((session) =>
-        session.getIdToken().getJwtToken()
-      );
+      // Generate a unique patient ID
+      const patientID = generatePatientID(patientName);
+  
+      // Retrieve Auth Token safely
+      let authToken;
+      try {
+        authToken = await Auth.currentSession().then((session) =>
+          session.getIdToken().getJwtToken()
+        );
+      } catch (authError) {
+        console.error('Authentication error:', authError);
+        toast.error('Authentication error. Please log in again.', { position: "top-right" });
+        return;
+      }
   
       const input = {
         patientID,
@@ -105,7 +123,7 @@ export default function AddPatientModal({ open, handleClose }) {
       const createResponse = await API.graphql({
         query: createPatient,
         variables: { input },
-        authMode: 'AMAZON_COGNITO_USER_POOLS', // Ensure the correct auth mode is used
+        authMode: 'AMAZON_COGNITO_USER_POOLS',
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -113,19 +131,21 @@ export default function AddPatientModal({ open, handleClose }) {
   
       if (createResponse.errors) {
         console.error('Error creating patient:', createResponse.errors);
-        alert(`Error: ${createResponse.errors[0].message}`);
+        toast.error(`Error: ${createResponse.errors[0].message}`, { position: "top-right" });
         return;
       }
+  
       if (createResponse.data) {
         toast.success('Patient added successfully!', { position: "top-right" });
         handleClose();
         resetFormData();
       }
     } catch (error) {
-      console.error('Error creating patient:', error);
-      alert('An error occurred while submitting patient data.');
+      console.error('Unexpected error:', error);
+      toast.error('An unexpected error occurred while submitting patient data.', { position: "top-right" });
     }
   };
+  
   
   const generatePatientID = (patientName) => {
     const firstLetter = patientName.trim()[0].toUpperCase();

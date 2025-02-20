@@ -67,7 +67,9 @@ export default function Dashboard({ signOut }) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState([]);
   const [selectedPatient, setSelectedPatient] = React.useState(null);
-  
+  const [nextToken, setNextToken] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
+
   const pages = [
     <MainDashboard/>,
     <DemographyPage selectedPatient={selectedPatient} />,
@@ -131,35 +133,49 @@ export default function Dashboard({ signOut }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const handleSearchChange = async (event) => {
+  const handleSearchChange = async (event, newNextToken = null) => {
     const query = event.target.value;
     setSearchQuery(query);
-  
+
     if (!query.trim()) {
-      setSearchResults([]);
-      return;
+        setSearchResults([]);
+        setNextToken(null);
+        return;
     }
-  
+
+    setIsFetching(true);
+
     try {
-      const response = await API.graphql(
-        graphqlOperation(listPatients, {
-          filter: {
-            or: [
-              { patientName: { contains: query.trim()} },
-              { patientID: { contains: query.trim()} },
-              { mobileNumber: { contains: query.trim() } },
-            ],
-          },
-        })
-      );
-  
-      const results = response.data.listPatients.items;
-      console.log(results);
-      setSearchResults(results);
+        const response = await API.graphql(
+            graphqlOperation(listPatients, {
+                filter: {
+                    or: [
+                        { patientName: { contains: query.trim() } },
+                        { patientID: { beginsWith: query.trim() } },
+                        { mobileNumber: { contains: query.trim() } },
+                    ],
+                },
+                limit: 6000,
+                nextToken: newNextToken, // Pass the nextToken for pagination
+            })
+        );
+
+        const results = response.data.listPatients.items;
+        setSearchResults(prevResults => newNextToken ? [...prevResults, ...results] : results);
+        setNextToken(response.data.listPatients.nextToken); // Update nextToken
+
     } catch (error) {
-      console.error('Error fetching search results:', error);
+        console.error('Error fetching search results:', error);
+    } finally {
+        setIsFetching(false);
     }
   };
+const handleLoadMore = () => {
+    if (nextToken) {
+        handleSearchChange({ target: { value: searchQuery } }, nextToken);
+    }
+};
+
   const handleSearchFocus = (event) => {
     setAnchorElq(event.target);
   };
